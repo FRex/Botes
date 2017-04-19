@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
-  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls;
+  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, SynEditMarkupHighAll;
 
 type
 
@@ -15,6 +15,7 @@ type
 
   TForm1 = class(TForm)
     AwesomeBar: TEdit;
+    TextQuery: TEdit;
     MainMenu1: TMainMenu;
     Suggestions: TMemo;
     MenuItemFileSave: TMenuItem;
@@ -28,7 +29,11 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure MenuItemFileSaveClick(Sender: TObject);
+    procedure TextEditorChange(Sender: TObject);
+    procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
+    procedure TextQueryChange(Sender: TObject);
+    procedure TextQueryKeyPress(Sender: TObject; var Key: char);
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
     procedure CollectAllTags;
@@ -54,6 +59,8 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+var
+  markup: TSynEditMarkupHighlightAllCaret;
 begin
   FAllLines := TStringList.Create;
   FDiscardedLines := TStringList.Create;
@@ -72,6 +79,14 @@ begin
   CollectAllTags;
 
   TextEditor.Lines.Assign(FAllLines);
+
+  markup := TSynEditMarkupHighlightAllCaret(
+    TextEditor.MarkupByClass[TSynEditMarkupHighlightAllCaret]);
+  markup.MarkupInfo.FrameColor := clSilver;
+  markup.MarkupInfo.Background := clGray;
+  markup.WaitTime := 100;
+  markup.Trim := True;
+  markup.FullWord := True;
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -90,10 +105,51 @@ begin
   TextEditor.MarkTextAsSaved;
 end;
 
+procedure TForm1.TextEditorChange(Sender: TObject);
+begin
+
+end;
+
+procedure TForm1.TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+begin
+  if (Ord(Key) = 70) and (Shift = [ssCtrl]) then
+    TextQuery.SetFocus;
+end;
+
 procedure TForm1.TextEditorKeyPress(Sender: TObject; var Key: char);
 begin
   if Ord(Key) = 27 then
     AwesomeBar.SetFocus;
+end;
+
+procedure TForm1.TextQueryChange(Sender: TObject);
+var
+  i, spot: integer;
+begin
+  //TODO: search from caret down at first
+  for i := 0 to TextEditor.Lines.Count do
+  begin
+    spot := Pos(UpperCase(TextQuery.Text), UpperCase(TextEditor.Lines[i]));
+    if spot <> 0 then
+    begin
+      TextEditor.CaretX := spot + Length(TextQuery.Text);
+      TextEditor.CaretY := i + 1;
+      TextEditor.BlockBegin := TPoint.Create(spot, i + 1);
+      TextEditor.BlockEnd := TPoint.Create(spot + Length(TextQuery.Text), i + 1);
+      Exit;
+    end;
+  end; //for line
+end;
+
+procedure TForm1.TextQueryKeyPress(Sender: TObject; var Key: char);
+begin
+  if Ord(Key) = 27 then
+    TextEditor.SetFocus;
+
+  if Ord(Key) = 13 then
+  begin
+    //TODO: find next
+  end;
 end;
 
 procedure TForm1.AwesomeBarChange(Sender: TObject);
