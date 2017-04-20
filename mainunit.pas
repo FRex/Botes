@@ -28,6 +28,7 @@ type
     procedure AwesomeBarKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure MenuItemFileOpenClick(Sender: TObject);
     procedure MenuItemFileSaveClick(Sender: TObject);
     procedure TextEditorChange(Sender: TObject);
     procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -94,6 +95,11 @@ begin
   FAllLines.Free;
   FDiscardedLines.Free;
   FAllTags.Free;
+end;
+
+procedure TForm1.MenuItemFileOpenClick(Sender: TObject);
+begin
+  ShowMessage('NOT IMPLEMENTED YET');
 end;
 
 procedure TForm1.MenuItemFileSaveClick(Sender: TObject);

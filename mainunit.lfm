@@ -562,6 +562,7 @@ object Form1: TForm1
       object MenuItemFileOpen: TMenuItem
         Caption = 'Open'
         ShortCut = 16463
+        OnClick = MenuItemFileOpenClick
       end
       object MenuItemFileSave: TMenuItem
         Caption = 'Save'
