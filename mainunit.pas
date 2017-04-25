@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
-  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, SynEditMarkupHighAll;
+  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, SynEditMarkupHighAll,
+  SynEditMiscClasses, SynEditMarkupSpecialLine;
 
 type
 
@@ -33,6 +34,8 @@ type
     procedure TextEditorChange(Sender: TObject);
     procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
+    procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
+      var Special: boolean; Markup: TSynSelectedColor);
     procedure TextQueryChange(Sender: TObject);
     procedure TextQueryKeyPress(Sender: TObject; var Key: char);
   private
@@ -126,6 +129,17 @@ procedure TForm1.TextEditorKeyPress(Sender: TObject; var Key: char);
 begin
   if Ord(Key) = 27 then
     AwesomeBar.SetFocus;
+end;
+
+procedure TForm1.TextEditorSpecialLineMarkup(Sender: TObject;
+  Line: integer; var Special: boolean; Markup: TSynSelectedColor);
+begin
+  if IsTagLine(TextEditor.Lines[Line - 1]) then
+  begin
+    Special := True;
+    Markup.Background := clMoneyGreen;
+    Markup.Foreground := clBlack;
+  end;
 end;
 
 procedure TForm1.TextQueryChange(Sender: TObject);
