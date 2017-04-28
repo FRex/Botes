@@ -43,6 +43,8 @@ type
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
     procedure UpdateSuggestions;
+    procedure SaveNotes;
+    function QueryUnsavedChanges: TModalResult;
     { private declarations }
   public
     { public declarations }
@@ -110,12 +112,7 @@ end;
 
 procedure TForm1.MenuItemFileSaveClick(Sender: TObject);
 begin
-  FAllLines.Assign(FDiscardedLines);
-  FAllLines.AddStrings(TextEditor.Lines);
-  FAllLines.SaveToFile('allnotes.txt');
-  CollectAllTags;
-  TextEditor.MarkTextAsSaved;
-  TextEditor.Modified := False;
+  SaveNotes;
 end;
 
 procedure TForm1.TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -181,7 +178,19 @@ begin
 end;
 
 procedure TForm1.AwesomeBarEnter(Sender: TObject);
+var
+  ans: TModalResult;
 begin
+  if TextEditor.Modified then
+  begin
+    ans := QueryUnsavedChanges;
+    if ans = mrCancel then
+      Exit;
+
+    if ans = mrYes then
+      SaveNotes;
+  end;
+
   Suggestions.Visible := True;
   UpdateSuggestions;
 end;
@@ -207,16 +216,10 @@ begin
     Exit;
   end;
 
-  ans := MessageDlg('Unsaved changes', 'There are unsaved changes. Save them?',
-    mtConfirmation, mbYesNoCancel, 0);
-
+  ans := QueryUnsavedChanges;
   CanClose := (ans <> mrCancel);
   if ans = mrYes then
-  begin
-    FAllLines.Assign(FDiscardedLines);
-    FAllLines.AddStrings(TextEditor.Lines);
-    FAllLines.SaveToFile('allnotes.txt');
-  end;
+    SaveNotes;
 end;
 
 procedure TForm1.CollectAllTags;
@@ -294,6 +297,24 @@ begin
     tmp.Free;
     bmap.Free;
   end;
+end;
+
+procedure TForm1.SaveNotes;
+begin
+  FAllLines.Assign(FDiscardedLines);
+  FAllLines.AddStrings(TextEditor.Lines);
+  FAllLines.SaveToFile('allnotes.txt');
+  CollectAllTags;
+  TextEditor.MarkTextAsSaved;
+  TextEditor.Modified := False;
+end;
+
+function TForm1.QueryUnsavedChanges: TModalResult;
+const
+  title = 'Unsaved changes';
+  message = 'There are unsaved changes. Save them?';
+begin
+  Result := MessageDlg(title, message, mtConfirmation, mbYesNoCancel, 0);
 end;
 
 end.
