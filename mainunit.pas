@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
   Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, SynEditMarkupHighAll,
-  SynEditMiscClasses, SynEditMarkupSpecialLine;
+  SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils;
 
 type
 
@@ -37,14 +37,19 @@ type
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
       var Special: boolean; Markup: TSynSelectedColor);
     procedure TextQueryChange(Sender: TObject);
+    procedure TextQueryEnter(Sender: TObject);
     procedure TextQueryKeyPress(Sender: TObject; var Key: char);
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
+    FFoundTextPoints: array of TPoint; //xy of caret for each found text
+
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
     procedure UpdateSuggestions;
     procedure SaveNotes;
     function QueryUnsavedChanges: TModalResult;
+    procedure RefreshFoundPoints;
+    procedure MoveCursorToNextFind;
     { private declarations }
   public
     { public declarations }
@@ -139,22 +144,14 @@ begin
 end;
 
 procedure TForm1.TextQueryChange(Sender: TObject);
-var
-  i, spot: integer;
 begin
-  //TODO: search from caret down at first
-  for i := 0 to TextEditor.Lines.Count do
-  begin
-    spot := Pos(UpperCase(TextQuery.Text), UpperCase(TextEditor.Lines[i]));
-    if spot <> 0 then
-    begin
-      TextEditor.CaretX := spot + Length(TextQuery.Text);
-      TextEditor.CaretY := i + 1;
-      TextEditor.BlockBegin := TPoint.Create(spot, i + 1);
-      TextEditor.BlockEnd := TPoint.Create(spot + Length(TextQuery.Text), i + 1);
-      Exit;
-    end;
-  end; //for line
+  RefreshFoundPoints;
+end;
+
+procedure TForm1.TextQueryEnter(Sender: TObject);
+begin
+  RefreshFoundPoints;
+  MoveCursorToNextFind;
 end;
 
 procedure TForm1.TextQueryKeyPress(Sender: TObject; var Key: char);
@@ -163,9 +160,7 @@ begin
     TextEditor.SetFocus;
 
   if Ord(Key) = 13 then
-  begin
-    //TODO: find next
-  end;
+    MoveCursorToNextFind;
 end;
 
 procedure TForm1.AwesomeBarChange(Sender: TObject);
@@ -315,6 +310,45 @@ const
   message = 'There are unsaved changes. Save them?';
 begin
   Result := MessageDlg(title, message, mtConfirmation, mbYesNoCancel, 0);
+end;
+
+procedure TForm1.RefreshFoundPoints;
+var
+  i, spot, x, y: integer;
+begin
+  SetLength(FFoundTextPoints, 0);
+  for i := 0 to TextEditor.Lines.Count do
+  begin
+    spot := 0;
+    while True do
+    begin
+      spot := PosEx(UpperCase(TextQuery.Text), UpperCase(TextEditor.Lines[i]), spot + 1);
+      if spot <> 0 then
+      begin
+        x := spot + Length(TextQuery.Text);
+        y := i + 1;
+        SetLength(FFoundTextPoints, Length(FFoundTextPoints) + 1);
+        FFoundTextPoints[High(FFoundTextPoints)].SetLocation(x, y);
+      end
+      else
+        Break;
+    end; //while true
+  end; //for line
+end;
+
+procedure TForm1.MoveCursorToNextFind;
+var
+  pt, c: TPoint;
+begin
+  c := TextEditor.CaretXY;
+  for pt in FFoundTextPoints do
+  begin
+    if (c.y < pt.y) or ((c.y = pt.y) and (c.x < pt.x)) then
+    begin
+      TextEditor.CaretXY := pt;
+      Exit;
+    end;
+  end;
 end;
 
 end.

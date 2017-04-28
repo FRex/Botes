@@ -551,6 +551,7 @@ object Form1: TForm1
     Width = 939
     Align = alBottom
     OnChange = TextQueryChange
+    OnEnter = TextQueryEnter
     OnKeyPress = TextQueryKeyPress
     TabOrder = 3
     Text = 'TextQuery'
