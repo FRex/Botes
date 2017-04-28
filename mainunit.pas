@@ -112,6 +112,7 @@ begin
   FAllLines.SaveToFile('allnotes.txt');
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
+  TextEditor.Modified := False;
 end;
 
 procedure TForm1.TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
