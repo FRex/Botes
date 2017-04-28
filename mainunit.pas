@@ -67,8 +67,11 @@ var
   markup: TSynEditMarkupHighlightAllCaret;
 begin
   FAllLines := TStringList.Create;
+  FAllLines.LineBreak := #10;
   FDiscardedLines := TStringList.Create;
+  FDiscardedLines.LineBreak := #10;
   FAllTags := TStringList.Create;
+  FAllLines.LineBreak := #10;
 
   try
     FAllLines.LoadFromFile('allnotes.txt');
