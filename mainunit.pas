@@ -27,11 +27,11 @@ type
     procedure AwesomeBarEnter(Sender: TObject);
     procedure AwesomeBarExit(Sender: TObject);
     procedure AwesomeBarKeyPress(Sender: TObject; var Key: char);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure MenuItemFileOpenClick(Sender: TObject);
     procedure MenuItemFileSaveClick(Sender: TObject);
-    procedure TextEditorChange(Sender: TObject);
     procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
@@ -114,11 +114,6 @@ begin
   TextEditor.MarkTextAsSaved;
 end;
 
-procedure TForm1.TextEditorChange(Sender: TObject);
-begin
-
-end;
-
 procedure TForm1.TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
   if (Ord(Key) = 70) and (Shift = [ssCtrl]) then
@@ -196,6 +191,28 @@ procedure TForm1.AwesomeBarKeyPress(Sender: TObject; var Key: char);
 begin
   if (Ord(Key) = 27) or (Ord(Key) = 13) then
     TextEditor.SetFocus;
+end;
+
+procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+var
+  ans: TModalResult;
+begin
+  if not TextEditor.Modified then
+  begin
+    CanClose := True;
+    Exit;
+  end;
+
+  ans := MessageDlg('Unsaved changes', 'There are unsaved changes. Save them?',
+    mtConfirmation, mbYesNoCancel, 0);
+
+  CanClose := (ans <> mrCancel);
+  if ans = mrYes then
+  begin
+    FAllLines.Assign(FDiscardedLines);
+    FAllLines.AddStrings(TextEditor.Lines);
+    FAllLines.SaveToFile('allnotes.txt');
+  end;
 end;
 
 procedure TForm1.CollectAllTags;
