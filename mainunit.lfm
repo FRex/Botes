@@ -20,9 +20,9 @@ object Form1: TForm1
     Width = 939
     Align = alClient
     Font.Height = -13
-    Font.Name = 'Courier New'
-    Font.Pitch = fpFixed
-    Font.Quality = fqNonAntialiased
+    Font.Name = 'DejaVu Sans Mono'
+    Font.Pitch = fpVariable
+    Font.Quality = fqCleartype
     ParentColor = False
     ParentFont = False
     TabOrder = 0
