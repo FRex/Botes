@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
-  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, SynEditMarkupHighAll,
+  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, SynEditMarkupHighAll,
   SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils;
 
 type
@@ -16,6 +16,7 @@ type
 
   TForm1 = class(TForm)
     AwesomeBar: TEdit;
+    StatusBar: TStatusBar;
     TextQuery: TEdit;
     MainMenu1: TMainMenu;
     Suggestions: TMemo;
@@ -339,19 +340,25 @@ end;
 procedure TForm1.MoveCursorToNextFind;
 var
   pt, c: TPoint;
+  i: integer;
 begin
   c := TextEditor.CaretXY;
-  for pt in FFoundTextPoints do
+  for i := 0 to High(FFoundTextPoints) do
   begin
+    pt := FFoundTextPoints[i];
     if (c.y < pt.y) or ((c.y = pt.y) and (c.x < pt.x)) then
     begin
       TextEditor.CaretXY := pt;
+      StatusBar.SimpleText := Format('Find: %d/%d', [i + 1, Length(FFoundTextPoints)]);
       Exit;
     end; //if
   end; //for
 
   if Length(FFoundTextPoints) <> 0 then
+  begin
     TextEditor.CaretXY := FFoundTextPoints[0];
+    StatusBar.SimpleText := Format('Find: 1/%d', [Length(FFoundTextPoints)]);
+  end;
 end;
 
 end.
