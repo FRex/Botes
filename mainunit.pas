@@ -347,8 +347,11 @@ begin
     begin
       TextEditor.CaretXY := pt;
       Exit;
-    end;
-  end;
+    end; //if
+  end; //for
+
+  if Length(FFoundTextPoints) <> 0 then
+    TextEditor.CaretXY := FFoundTextPoints[0];
 end;
 
 end.
