@@ -31,6 +31,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MenuItemFileOpenClick(Sender: TObject);
     procedure MenuItemFileSaveClick(Sender: TObject);
     procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -109,6 +110,11 @@ begin
   FAllLines.Free;
   FDiscardedLines.Free;
   FAllTags.Free;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+  WindowState := wsMaximized;
 end;
 
 procedure TForm1.MenuItemFileOpenClick(Sender: TObject);

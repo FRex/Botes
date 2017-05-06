@@ -11,8 +11,8 @@ object Form1: TForm1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   LCLVersion = '1.6.4.0'
-  WindowState = wsMaximized
   inline TextEditor: TSynEdit
     Left = 0
     Height = 433
