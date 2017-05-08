@@ -3,10 +3,9 @@ object Form1: TForm1
   Height = 633
   Top = 176
   Width = 939
-  Caption = 'Form1'
-  ClientHeight = 608
+  Caption = 'Botes'
+  ClientHeight = 633
   ClientWidth = 939
-  Menu = MainMenu1
   OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -16,7 +15,7 @@ object Form1: TForm1
   object TextQuery: TEdit
     Left = 0
     Height = 28
-    Top = 551
+    Top = 576
     Width = 939
     Align = alBottom
     OnChange = TextQueryChange
@@ -28,13 +27,13 @@ object Form1: TForm1
   object StatusBar: TStatusBar
     Left = 0
     Height = 29
-    Top = 579
+    Top = 604
     Width = 939
     Panels = <>
   end
   object MainTabs: TTabControl
     Left = 0
-    Height = 551
+    Height = 576
     Top = 0
     Width = 939
     OnChange = MainTabsChange
@@ -75,7 +74,7 @@ object Form1: TForm1
     end
     inline TextEditor: TSynEdit
       Left = 2
-      Height = 403
+      Height = 428
       Top = 146
       Width = 935
       Align = alClient
@@ -553,23 +552,6 @@ object Form1: TForm1
       end
     end
   end
-  object MainMenu1: TMainMenu
-    left = 280
-    top = 88
-    object MenuItemFile: TMenuItem
-      Caption = 'File'
-      object MenuItemFileOpen: TMenuItem
-        Caption = 'Open'
-        ShortCut = 16463
-        OnClick = MenuItemFileOpenClick
-      end
-      object MenuItemFileSave: TMenuItem
-        Caption = 'Save'
-        ShortCut = 16467
-        OnClick = MenuItemFileSaveClick
-      end
-    end
-  end
   object MainTabsActionList: TActionList
     left = 427
     top = 236
@@ -605,6 +587,11 @@ object Form1: TForm1
       Caption = 'MoveTabBackwardAction'
       OnExecute = MoveTabBackwardActionExecute
       ShortCut = 24609
+    end
+    object SaveNotesAction: TAction
+      Caption = 'SaveNotesAction'
+      OnExecute = SaveNotesActionExecute
+      ShortCut = 16467
     end
   end
 end

@@ -15,6 +15,7 @@ type
 
 
   TForm1 = class(TForm)
+    SaveNotesAction: TAction;
     MoveTabForwardAction: TAction;
     MoveTabBackwardAction: TAction;
     PrevTabAction: TAction;
@@ -26,11 +27,7 @@ type
     StatusBar: TStatusBar;
     MainTabs: TTabControl;
     TextQuery: TEdit;
-    MainMenu1: TMainMenu;
     Suggestions: TMemo;
-    MenuItemFileSave: TMenuItem;
-    MenuItemFile: TMenuItem;
-    MenuItemFileOpen: TMenuItem;
     TextEditor: TSynEdit;
     procedure AwesomeBarChange(Sender: TObject);
     procedure AwesomeBarEnter(Sender: TObject);
@@ -44,13 +41,12 @@ type
     procedure FormShow(Sender: TObject);
     procedure MainTabsChange(Sender: TObject);
     procedure MainTabsChanging(Sender: TObject; var AllowChange: boolean);
-    procedure MenuItemFileOpenClick(Sender: TObject);
-    procedure MenuItemFileSaveClick(Sender: TObject);
     procedure MoveTabBackwardActionExecute(Sender: TObject);
     procedure MoveTabForwardActionExecute(Sender: TObject);
     procedure NewTabActionExecute(Sender: TObject);
     procedure NextTabActionExecute(Sender: TObject);
     procedure PrevTabActionExecute(Sender: TObject);
+    procedure SaveNotesActionExecute(Sender: TObject);
     procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
@@ -169,16 +165,6 @@ begin
   end; //if
 end;
 
-procedure TForm1.MenuItemFileOpenClick(Sender: TObject);
-begin
-  ShowMessage('NOT IMPLEMENTED YET');
-end;
-
-procedure TForm1.MenuItemFileSaveClick(Sender: TObject);
-begin
-  SaveNotes;
-end;
-
 procedure TForm1.MoveTabBackwardActionExecute(Sender: TObject);
 var
   onchanging: TTabChangingEvent;
@@ -234,6 +220,11 @@ begin
     tab := MainTabs.Tabs.Count;
 
   MainTabs.TabIndex := tab - 1;
+end;
+
+procedure TForm1.SaveNotesActionExecute(Sender: TObject);
+begin
+  SaveNotes;
 end;
 
 procedure TForm1.TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
