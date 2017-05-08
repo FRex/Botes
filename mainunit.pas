@@ -17,6 +17,7 @@ type
   TForm1 = class(TForm)
     AwesomeBar: TEdit;
     StatusBar: TStatusBar;
+    MainTabs: TTabControl;
     TextQuery: TEdit;
     MainMenu1: TMainMenu;
     Suggestions: TMemo;
@@ -32,6 +33,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure MainTabsChange(Sender: TObject);
+    procedure MainTabsChanging(Sender: TObject; var AllowChange: boolean);
     procedure MenuItemFileOpenClick(Sender: TObject);
     procedure MenuItemFileSaveClick(Sender: TObject);
     procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -44,6 +47,7 @@ type
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
     FFoundTextPoints: array of TPoint; //xy of caret for each found text
+    FTabsAwesomeBarQueries: array of string; //per tab query
 
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
@@ -52,6 +56,7 @@ type
     function QueryUnsavedChanges: TModalResult;
     procedure RefreshFoundPoints;
     procedure MoveCursorToNextFind;
+    procedure OpenNewTab(query: string = '');
     { private declarations }
   public
     { public declarations }
@@ -103,6 +108,11 @@ begin
   markup.WaitTime := 100;
   markup.Trim := True;
   markup.FullWord := True;
+  SetLength(FTabsAwesomeBarQueries, 1);
+  FTabsAwesomeBarQueries[0] := '';
+
+  OpenNewTab('test');
+  OpenNewTab('dracula');
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -114,7 +124,32 @@ end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
+  AwesomeBar.SetFocus;
   WindowState := wsMaximized;
+end;
+
+procedure TForm1.MainTabsChange(Sender: TObject);
+begin
+  AwesomeBar.Text := FTabsAwesomeBarQueries[MainTabs.TabIndex];
+end;
+
+procedure TForm1.MainTabsChanging(Sender: TObject; var AllowChange: boolean);
+var
+  ans: TModalResult;
+begin
+  if TextEditor.Modified then
+  begin
+    ans := QueryUnsavedChanges;
+    if ans = mrCancel then
+      AllowChange := False;
+
+    if ans = mrYes then
+      SaveNotes;
+
+    if ans = mrNo then
+      TextEditor.Modified := False;
+
+  end; //if
 end;
 
 procedure TForm1.MenuItemFileOpenClick(Sender: TObject);
@@ -172,6 +207,7 @@ end;
 
 procedure TForm1.AwesomeBarChange(Sender: TObject);
 begin
+  FTabsAwesomeBarQueries[MainTabs.TabIndex] := AwesomeBar.Text;
   UpdateSuggestions;
   if AwesomeBar.Text = '' then
     TextEditor.Lines.Assign(FAllLines)
@@ -365,6 +401,13 @@ begin
     TextEditor.CaretXY := FFoundTextPoints[0];
     StatusBar.SimpleText := Format('Find: 1/%d', [Length(FFoundTextPoints)]);
   end;
+end;
+
+procedure TForm1.OpenNewTab(query: string = '');
+begin
+  MainTabs.Tabs.Append('New Tab!');
+  SetLength(FTabsAwesomeBarQueries, Length(FTabsAwesomeBarQueries) + 1);
+  FTabsAwesomeBarQueries[High(FTabsAwesomeBarQueries)] := query;
 end;
 
 end.
