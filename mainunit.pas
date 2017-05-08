@@ -15,6 +15,9 @@ type
 
 
   TForm1 = class(TForm)
+    BeginFindAction: TAction;
+    TextQueryStatusLabel: TLabel;
+    TextQueryPanel: TPanel;
     SaveNotesAction: TAction;
     MoveTabForwardAction: TAction;
     MoveTabBackwardAction: TAction;
@@ -24,7 +27,6 @@ type
     CloseTabAction: TAction;
     MainTabsActionList: TActionList;
     AwesomeBar: TEdit;
-    StatusBar: TStatusBar;
     MainTabs: TTabControl;
     TextQuery: TEdit;
     Suggestions: TMemo;
@@ -33,6 +35,7 @@ type
     procedure AwesomeBarEnter(Sender: TObject);
     procedure AwesomeBarExit(Sender: TObject);
     procedure AwesomeBarKeyPress(Sender: TObject; var Key: char);
+    procedure BeginFindActionExecute(Sender: TObject);
     procedure CloseTabActionExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -47,12 +50,12 @@ type
     procedure NextTabActionExecute(Sender: TObject);
     procedure PrevTabActionExecute(Sender: TObject);
     procedure SaveNotesActionExecute(Sender: TObject);
-    procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
       var Special: boolean; Markup: TSynSelectedColor);
     procedure TextQueryChange(Sender: TObject);
     procedure TextQueryEnter(Sender: TObject);
+    procedure TextQueryExit(Sender: TObject);
     procedure TextQueryKeyPress(Sender: TObject; var Key: char);
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
@@ -227,12 +230,6 @@ begin
   SaveNotes;
 end;
 
-procedure TForm1.TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
-begin
-  if (Ord(Key) = 70) and (Shift = [ssCtrl]) then
-    TextQuery.SetFocus;
-end;
-
 procedure TForm1.TextEditorKeyPress(Sender: TObject; var Key: char);
 begin
   if Ord(Key) = 27 then
@@ -259,6 +256,11 @@ procedure TForm1.TextQueryEnter(Sender: TObject);
 begin
   RefreshFoundPoints;
   MoveCursorToNextFind;
+end;
+
+procedure TForm1.TextQueryExit(Sender: TObject);
+begin
+  TextQueryPanel.Hide;
 end;
 
 procedure TForm1.TextQueryKeyPress(Sender: TObject; var Key: char);
@@ -310,6 +312,12 @@ procedure TForm1.AwesomeBarKeyPress(Sender: TObject; var Key: char);
 begin
   if (Ord(Key) = 27) or (Ord(Key) = 13) then
     TextEditor.SetFocus;
+end;
+
+procedure TForm1.BeginFindActionExecute(Sender: TObject);
+begin
+  TextQueryPanel.Show;
+  TextQuery.SetFocus;
 end;
 
 procedure TForm1.CloseTabActionExecute(Sender: TObject);
@@ -476,7 +484,8 @@ begin
     if (c.y < pt.y) or ((c.y = pt.y) and (c.x < pt.x)) then
     begin
       TextEditor.CaretXY := pt;
-      StatusBar.SimpleText := Format('Find: %d/%d', [i + 1, Length(FFoundTextPoints)]);
+      TextQueryStatusLabel.Caption :=
+        Format('Find: %d/%d', [i + 1, Length(FFoundTextPoints)]);
       Exit;
     end; //if
   end; //for
@@ -484,8 +493,10 @@ begin
   if Length(FFoundTextPoints) <> 0 then
   begin
     TextEditor.CaretXY := FFoundTextPoints[0];
-    StatusBar.SimpleText := Format('Find: 1/%d', [Length(FFoundTextPoints)]);
-  end;
+    TextQueryStatusLabel.Caption := Format('Find: 1/%d', [Length(FFoundTextPoints)]);
+  end
+  else
+    TextQueryStatusLabel.Caption := 'No Results';
 end;
 
 end.
