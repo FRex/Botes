@@ -180,21 +180,31 @@ begin
 end;
 
 procedure TForm1.MoveTabBackwardActionExecute(Sender: TObject);
+var
+  onchanging: TTabChangingEvent;
 begin
   if MainTabs.TabIndex = 0 then
     Exit;
 
   MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex - 1);
+  onchanging := MainTabs.OnChanging;
+  MainTabs.OnChanging := nil;
   MainTabs.TabIndex := MainTabs.TabIndex - 1;
+  MainTabs.OnChanging := onchanging;
 end;
 
 procedure TForm1.MoveTabForwardActionExecute(Sender: TObject);
+var
+  onchanging: TTabChangingEvent;
 begin
   if (MainTabs.TabIndex + 1) = MainTabs.Tabs.Count then
     Exit;
 
   MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex + 1);
+  onchanging := MainTabs.OnChanging;
+  MainTabs.OnChanging := nil;
   MainTabs.TabIndex := MainTabs.TabIndex + 1;
+  MainTabs.OnChanging := onchanging;
 end;
 
 procedure TForm1.NewTabActionExecute(Sender: TObject);
