@@ -1,6 +1,8 @@
 # Botes
 Botes is a simple notes keeping application made with [Lazarus IDE](https://www.lazarus-ide.org/). Written mostly for personaly use, potentially unstable and buggy - backup your allnotes.txt if you use it!
 
+![sshot0](sshots/sshot0.png)
+
 # Idea
 The concept of botes materialized due to few varied reasons:
 * Loss of varius txt note files I kept during an urgent disk reformat after a virus struck
