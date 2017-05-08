@@ -2,10 +2,12 @@
 Botes is a simple notes keeping application made with [Lazarus IDE](https://www.lazarus-ide.org/). Written mostly for personaly use, potentially unstable and buggy - backup your allnotes.txt if you use it!
 
 # Idea
-The concept of botes materialized due to few things happening:
+The concept of botes materialized due to few varied reasons:
 * Loss of varius txt note files I kept during an urgent disk reformat after a virus struck
 * Proliferation of txt files with per project notes, todo lists, etc. in many locations
 * My desire to have some fun using Object Pascal again after a long break
+* Speed and ease with which simple applications in Lazarus using LCL can be made
+* The *interesting* reactions I get for saying I use Pascal in 2017
 
 The idea behind botes is to be a simple, highly shortcut and keyborad controlable application to store notes in a single txt file (for ease of backing up, copying, etc.), split into sections tagged by hashtags. That file right now is named allnotes.txt and resides next to the exe, this may change or be configurable (or the application may allow opening and working with different files - but always with one at a time) in a future release.
 
