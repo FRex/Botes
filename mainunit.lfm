@@ -158,28 +158,12 @@ object Form1: TForm1
           ShortCut = 8226
         end      
         item
-          Command = ecPageBottom
-          ShortCut = 16418
-        end      
-        item
-          Command = ecSelPageBottom
-          ShortCut = 24610
-        end      
-        item
           Command = ecPageUp
           ShortCut = 33
         end      
         item
           Command = ecSelPageUp
           ShortCut = 8225
-        end      
-        item
-          Command = ecPageTop
-          ShortCut = 16417
-        end      
-        item
-          Command = ecSelPageTop
-          ShortCut = 24609
         end      
         item
           Command = ecLineStart
@@ -272,14 +256,6 @@ object Form1: TForm1
         item
           Command = ecLineBreak
           ShortCut = 16461
-        end      
-        item
-          Command = ecInsertLine
-          ShortCut = 16462
-        end      
-        item
-          Command = ecDeleteWord
-          ShortCut = 16468
         end      
         item
           Command = ecBlockUnindent
@@ -605,6 +581,9 @@ object Form1: TForm1
     object NewTabAction: TAction
       Caption = 'NewTabAction'
       OnExecute = NewTabActionExecute
+      SecondaryShortCuts.Strings = (
+        'Ctrl+N'
+      )
       ShortCut = 16468
     end
     object NextTabAction: TAction
