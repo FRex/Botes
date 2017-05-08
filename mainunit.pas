@@ -284,7 +284,10 @@ begin
   MainTabs.Tabs[MainTabs.TabIndex] := AwesomeBar.Text;
   UpdateSuggestions;
   if AwesomeBar.Text = '' then
-    TextEditor.Lines.Assign(FAllLines)
+  begin
+    FDiscardedLines.Clear;
+    TextEditor.Lines.Assign(FAllLines);
+  end
   else
     FilterTextByAwesomeBar;
 end;
