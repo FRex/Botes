@@ -392,7 +392,7 @@ var
   str: string;
   tmp: TStringList;
   bmap: TBitmap;
-  cy: integer;
+  cy: integer = 0;
 begin
   try
     bmap := TBitmap.Create;
@@ -407,7 +407,9 @@ begin
     tmp.Delimiter := #10;
     Suggestions.Text := tmp.DelimitedText;
     bmap.Canvas.Font := Suggestions.Font;
-    cy := bmap.Canvas.TextHeight(Suggestions.Lines[0]);
+    if Suggestions.Lines.Count <> 0 then
+      cy := bmap.Canvas.TextHeight(Suggestions.Lines[0]);
+
     Suggestions.Height := Suggestions.Lines.Count * cy + cy div 2;
   finally
     tmp.Free;
