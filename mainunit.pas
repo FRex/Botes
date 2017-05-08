@@ -211,6 +211,7 @@ procedure TForm1.NewTabActionExecute(Sender: TObject);
 begin
   MainTabs.Tabs.Append('');
   MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
+  AwesomeBar.SetFocus;
 end;
 
 procedure TForm1.NextTabActionExecute(Sender: TObject);
