@@ -602,5 +602,30 @@ object Form1: TForm1
       OnExecute = CloseTabActionExecute
       ShortCut = 16471
     end
+    object NewTabAction: TAction
+      Caption = 'NewTabAction'
+      OnExecute = NewTabActionExecute
+      ShortCut = 16468
+    end
+    object NextTabAction: TAction
+      Caption = 'NextTabAction'
+      OnExecute = NextTabActionExecute
+      ShortCut = 16418
+    end
+    object PrevTabAction: TAction
+      Caption = 'PrevTabAction'
+      OnExecute = PrevTabActionExecute
+      ShortCut = 16417
+    end
+    object MoveTabForwardAction: TAction
+      Caption = 'MoveTabForwardAction'
+      OnExecute = MoveTabForwardActionExecute
+      ShortCut = 24610
+    end
+    object MoveTabBackwardAction: TAction
+      Caption = 'MoveTabBackwardAction'
+      OnExecute = MoveTabBackwardActionExecute
+      ShortCut = 24609
+    end
   end
 end

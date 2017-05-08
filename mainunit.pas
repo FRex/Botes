@@ -15,6 +15,11 @@ type
 
 
   TForm1 = class(TForm)
+    MoveTabForwardAction: TAction;
+    MoveTabBackwardAction: TAction;
+    PrevTabAction: TAction;
+    NextTabAction: TAction;
+    NewTabAction: TAction;
     CloseTabAction: TAction;
     MainTabsActionList: TActionList;
     AwesomeBar: TEdit;
@@ -41,6 +46,11 @@ type
     procedure MainTabsChanging(Sender: TObject; var AllowChange: boolean);
     procedure MenuItemFileOpenClick(Sender: TObject);
     procedure MenuItemFileSaveClick(Sender: TObject);
+    procedure MoveTabBackwardActionExecute(Sender: TObject);
+    procedure MoveTabForwardActionExecute(Sender: TObject);
+    procedure NewTabActionExecute(Sender: TObject);
+    procedure NextTabActionExecute(Sender: TObject);
+    procedure PrevTabActionExecute(Sender: TObject);
     procedure TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
@@ -167,6 +177,52 @@ end;
 procedure TForm1.MenuItemFileSaveClick(Sender: TObject);
 begin
   SaveNotes;
+end;
+
+procedure TForm1.MoveTabBackwardActionExecute(Sender: TObject);
+begin
+  if MainTabs.TabIndex = 0 then
+    Exit;
+
+  MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex - 1);
+  MainTabs.TabIndex := MainTabs.TabIndex - 1;
+end;
+
+procedure TForm1.MoveTabForwardActionExecute(Sender: TObject);
+begin
+  if (MainTabs.TabIndex + 1) = MainTabs.Tabs.Count then
+    Exit;
+
+  MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex + 1);
+  MainTabs.TabIndex := MainTabs.TabIndex + 1;
+end;
+
+procedure TForm1.NewTabActionExecute(Sender: TObject);
+begin
+  MainTabs.Tabs.Append('');
+  MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
+end;
+
+procedure TForm1.NextTabActionExecute(Sender: TObject);
+var
+  tab: integer;
+begin
+  tab := MainTabs.TabIndex + 1;
+  if tab = MainTabs.Tabs.Count then
+    tab := 0;
+
+  MainTabs.TabIndex := tab;
+end;
+
+procedure TForm1.PrevTabActionExecute(Sender: TObject);
+var
+  tab: integer;
+begin
+  tab := MainTabs.TabIndex;
+  if tab = 0 then
+    tab := MainTabs.Tabs.Count;
+
+  MainTabs.TabIndex := tab - 1;
 end;
 
 procedure TForm1.TextEditorKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
