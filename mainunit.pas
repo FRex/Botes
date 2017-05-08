@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
-  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, SynEditMarkupHighAll,
-  SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils;
+  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, ActnList,
+  SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils;
 
 type
 
@@ -15,6 +15,8 @@ type
 
 
   TForm1 = class(TForm)
+    CloseTabAction: TAction;
+    MainTabsActionList: TActionList;
     AwesomeBar: TEdit;
     StatusBar: TStatusBar;
     MainTabs: TTabControl;
@@ -29,6 +31,8 @@ type
     procedure AwesomeBarEnter(Sender: TObject);
     procedure AwesomeBarExit(Sender: TObject);
     procedure AwesomeBarKeyPress(Sender: TObject; var Key: char);
+    procedure CloseTabActionExecute(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -55,7 +59,6 @@ type
     function QueryUnsavedChanges: TModalResult;
     procedure RefreshFoundPoints;
     procedure MoveCursorToNextFind;
-    procedure OpenNewTab(query: string = '');
     { private declarations }
   public
     { public declarations }
@@ -85,6 +88,7 @@ begin
   FDiscardedLines.LineBreak := #10;
   FAllTags := TStringList.Create;
   FAllLines.LineBreak := #10;
+  MainTabs.Tabs.LineBreak := #10;
 
   try
     FAllLines.LoadFromFile('allnotes.txt');
@@ -108,8 +112,14 @@ begin
   markup.Trim := True;
   markup.FullWord := True;
 
-  OpenNewTab('test');
-  OpenNewTab('dracula');
+  try
+    MainTabs.Tabs.LoadFromFile('tabs.txt');
+  except
+    //ignore EFOpenError - we start with one empty tab set in designer so its ok
+  end;
+
+  //set first tab awesome bar
+  MainTabsChange(MainTabs);
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -239,6 +249,21 @@ procedure TForm1.AwesomeBarKeyPress(Sender: TObject; var Key: char);
 begin
   if (Ord(Key) = 27) or (Ord(Key) = 13) then
     TextEditor.SetFocus;
+end;
+
+procedure TForm1.CloseTabActionExecute(Sender: TObject);
+begin
+  MainTabs.Tabs.Delete(MainTabs.TabIndex);
+  if MainTabs.Tabs.Count = 0 then
+  begin
+    MainTabs.Tabs.Append('');
+    MainTabsChange(MainTabs);
+  end;
+end;
+
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  MainTabs.Tabs.SaveToFile('tabs.txt');
 end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -398,11 +423,6 @@ begin
     TextEditor.CaretXY := FFoundTextPoints[0];
     StatusBar.SimpleText := Format('Find: 1/%d', [Length(FFoundTextPoints)]);
   end;
-end;
-
-procedure TForm1.OpenNewTab(query: string = '');
-begin
-  MainTabs.Tabs.Append(query);
 end;
 
 end.

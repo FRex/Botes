@@ -7,6 +7,7 @@ object Form1: TForm1
   ClientHeight = 608
   ClientWidth = 939
   Menu = MainMenu1
+  OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -591,6 +592,15 @@ object Form1: TForm1
         ShortCut = 16467
         OnClick = MenuItemFileSaveClick
       end
+    end
+  end
+  object MainTabsActionList: TActionList
+    left = 427
+    top = 236
+    object CloseTabAction: TAction
+      Caption = 'CloseTabAction'
+      OnExecute = CloseTabActionExecute
+      ShortCut = 16471
     end
   end
 end
