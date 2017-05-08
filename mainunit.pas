@@ -140,8 +140,13 @@ end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
-  AwesomeBar.SetFocus;
   WindowState := wsMaximized;
+
+  //set focus to text if there is a tag query or to awesome bar if there isnt
+  if Length(MainTabs.Tabs[MainTabs.TabIndex]) = 0 then
+    AwesomeBar.SetFocus
+  else
+    TextEditor.SetFocus;
 end;
 
 procedure TForm1.MainTabsChange(Sender: TObject);
