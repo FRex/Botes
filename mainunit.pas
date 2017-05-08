@@ -47,7 +47,6 @@ type
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
     FFoundTextPoints: array of TPoint; //xy of caret for each found text
-    FTabsAwesomeBarQueries: array of string; //per tab query
 
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
@@ -108,8 +107,6 @@ begin
   markup.WaitTime := 100;
   markup.Trim := True;
   markup.FullWord := True;
-  SetLength(FTabsAwesomeBarQueries, 1);
-  FTabsAwesomeBarQueries[0] := '';
 
   OpenNewTab('test');
   OpenNewTab('dracula');
@@ -130,7 +127,7 @@ end;
 
 procedure TForm1.MainTabsChange(Sender: TObject);
 begin
-  AwesomeBar.Text := FTabsAwesomeBarQueries[MainTabs.TabIndex];
+  AwesomeBar.Text := MainTabs.Tabs[MainTabs.TabIndex];
 end;
 
 procedure TForm1.MainTabsChanging(Sender: TObject; var AllowChange: boolean);
@@ -207,7 +204,7 @@ end;
 
 procedure TForm1.AwesomeBarChange(Sender: TObject);
 begin
-  FTabsAwesomeBarQueries[MainTabs.TabIndex] := AwesomeBar.Text;
+  MainTabs.Tabs[MainTabs.TabIndex] := AwesomeBar.Text;
   UpdateSuggestions;
   if AwesomeBar.Text = '' then
     TextEditor.Lines.Assign(FAllLines)
@@ -405,9 +402,7 @@ end;
 
 procedure TForm1.OpenNewTab(query: string = '');
 begin
-  MainTabs.Tabs.Append('New Tab!');
-  SetLength(FTabsAwesomeBarQueries, Length(FTabsAwesomeBarQueries) + 1);
-  FTabsAwesomeBarQueries[High(FTabsAwesomeBarQueries)] := query;
+  MainTabs.Tabs.Append(query);
 end;
 
 end.
