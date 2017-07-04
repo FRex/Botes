@@ -100,7 +100,7 @@ begin
   MainTabs.Tabs.LineBreak := #10;
 
   try
-    FAllLines.LoadFromFile('allnotes.txt');
+    FAllLines.LoadFromFile(ExtractFilePath(Application.ExeName) + 'allnotes.txt');
   except
     on EFOpenError do
       MessageDlg('File not found', 'Failed to open file allnotes.txt.',
@@ -122,7 +122,7 @@ begin
   markup.FullWord := True;
 
   try
-    MainTabs.Tabs.LoadFromFile('tabs.txt');
+    MainTabs.Tabs.LoadFromFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
   except
     //ignore EFOpenError - we start with one empty tab set in designer so its ok
   end;
@@ -337,7 +337,7 @@ end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
-  MainTabs.Tabs.SaveToFile('tabs.txt');
+  MainTabs.Tabs.SaveToFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
 end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -439,7 +439,7 @@ procedure TForm1.SaveNotes;
 begin
   FAllLines.Assign(FDiscardedLines);
   FAllLines.AddStrings(TextEditor.Lines);
-  FAllLines.SaveToFile('allnotes.txt');
+  FAllLines.SaveToFile(ExtractFilePath(Application.ExeName) + 'allnotes.txt');
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
