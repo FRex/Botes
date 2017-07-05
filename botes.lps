@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="25" Y="18"/>
-        <UsageCount Value="45"/>
+        <UsageCount Value="46"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainunit.pas"/>
@@ -19,9 +19,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="455"/>
-        <CursorPos X="7" Y="486"/>
-        <UsageCount Value="45"/>
+        <TopLine Value="334"/>
+        <CursorPos X="8" Y="352"/>
+        <UsageCount Value="46"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -32,7 +32,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="12"/>
         <CursorPos Y="39"/>
-        <UsageCount Value="45"/>
+        <UsageCount Value="46"/>
       </Unit2>
       <Unit3>
         <Filename Value="segmentedfile.pas"/>
@@ -40,7 +40,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="31"/>
         <CursorPos X="10" Y="52"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="43"/>
       </Unit3>
       <Unit4>
         <Filename Value="C:\lazarus\components\synedit\synedit.pp"/>
@@ -197,8 +197,8 @@
         <Filename Value="C:\lazarus\lcl\comctrls.pp"/>
         <UnitName Value="ComCtrls"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="474"/>
-        <CursorPos X="21" Y="485"/>
+        <TopLine Value="857"/>
+        <CursorPos X="14" Y="873"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit24>
@@ -215,123 +215,122 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="257" Column="42" TopLine="241"/>
+        <Caret Line="400" TopLine="382"/>
       </Position1>
       <Position2>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="271" Column="19" TopLine="245"/>
+        <Caret Line="404" TopLine="382"/>
       </Position2>
       <Position3>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="72" Column="82" TopLine="44"/>
+        <Caret Line="405" TopLine="382"/>
       </Position3>
       <Position4>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="397" TopLine="382"/>
+        <Caret Line="407" TopLine="382"/>
       </Position4>
       <Position5>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="398" TopLine="382"/>
+        <Caret Line="408" TopLine="382"/>
       </Position5>
       <Position6>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="399" TopLine="382"/>
+        <Caret Line="409" TopLine="382"/>
       </Position6>
       <Position7>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="400" TopLine="382"/>
+        <Caret Line="410" TopLine="382"/>
       </Position7>
       <Position8>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="404" TopLine="382"/>
+        <Caret Line="418" Column="37" TopLine="404"/>
       </Position8>
       <Position9>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="405" TopLine="382"/>
+        <Caret Line="193" Column="3" TopLine="191"/>
       </Position9>
       <Position10>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="407" TopLine="382"/>
+        <Caret Line="188" Column="27" TopLine="179"/>
       </Position10>
       <Position11>
-        <Filename Value="mainunit.pas"/>
-        <Caret Line="408" TopLine="382"/>
+        <Filename Value="C:\lazarus\lcl\comctrls.pp"/>
+        <Caret Line="861" Column="14" TopLine="844"/>
       </Position11>
       <Position12>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="396" Column="14" TopLine="382"/>
+        <Caret Line="196" Column="17" TopLine="179"/>
       </Position12>
       <Position13>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="397" TopLine="382"/>
+        <Caret Line="195" Column="17" TopLine="178"/>
       </Position13>
       <Position14>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="398" TopLine="382"/>
+        <Caret Line="211" Column="19" TopLine="178"/>
       </Position14>
       <Position15>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="399" TopLine="382"/>
+        <Caret Line="478" Column="9" TopLine="455"/>
       </Position15>
       <Position16>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="400" TopLine="382"/>
+        <Caret Line="471" Column="41" TopLine="455"/>
       </Position16>
       <Position17>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="404" TopLine="382"/>
+        <Caret Line="103" Column="80" TopLine="85"/>
       </Position17>
       <Position18>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="405" TopLine="382"/>
+        <Caret Line="219" Column="76" TopLine="202"/>
       </Position18>
       <Position19>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="407" TopLine="382"/>
+        <Caret Line="340" Column="44" TopLine="320"/>
       </Position19>
       <Position20>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="408" TopLine="382"/>
+        <Caret Line="487" Column="48" TopLine="473"/>
       </Position20>
       <Position21>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="409" TopLine="382"/>
+        <Caret Line="341" Column="36" TopLine="322"/>
       </Position21>
       <Position22>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="410" TopLine="382"/>
+        <Caret Line="337" Column="93" TopLine="322"/>
       </Position22>
       <Position23>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="418" Column="37" TopLine="404"/>
+        <Caret Line="341" Column="76" TopLine="322"/>
       </Position23>
       <Position24>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="193" Column="3" TopLine="191"/>
+        <Caret Line="339" Column="76" TopLine="322"/>
       </Position24>
       <Position25>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="188" Column="27" TopLine="179"/>
       </Position25>
       <Position26>
-        <Filename Value="C:\lazarus\lcl\comctrls.pp"/>
-        <Caret Line="861" Column="14" TopLine="844"/>
+        <Filename Value="mainunit.pas"/>
+        <Caret Line="2" Column="5"/>
       </Position26>
       <Position27>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="196" Column="17" TopLine="179"/>
+        <Caret Line="131" Column="33" TopLine="100"/>
       </Position27>
       <Position28>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="195" Column="17" TopLine="178"/>
+        <Caret Line="129" Column="66" TopLine="111"/>
       </Position28>
       <Position29>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="211" Column="19" TopLine="178"/>
+        <Caret Line="130" Column="25" TopLine="111"/>
       </Position29>
       <Position30>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="478" Column="9" TopLine="455"/>
+        <Caret Line="352" Column="13" TopLine="334"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

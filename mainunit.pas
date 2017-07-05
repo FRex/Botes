@@ -90,6 +90,7 @@ end;
 procedure TForm1.FormCreate(Sender: TObject);
 var
   markup: TSynEditMarkupHighlightAllCaret;
+  i: integer;
 begin
   FAllLines := TStringList.Create;
   FAllLines.LineBreak := #10;
@@ -123,6 +124,12 @@ begin
 
   try
     MainTabs.Tabs.LoadFromFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
+    for i := 0 to MainTabs.Tabs.Count - 1 do
+      if (length(MainTabs.Tabs[i]) > 0) and (MainTabs.Tabs[i][1] = '@') then
+      begin
+        MainTabs.Tabs[i] := Copy(MainTabs.Tabs[i], 2, length(MainTabs.Tabs[i]));
+        MainTabs.TabIndex := i;
+      end;
   except
     //ignore EFOpenError - we start with one empty tab set in designer so its ok
   end;
@@ -336,8 +343,14 @@ begin
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+var
+  strs: TStringList;
 begin
-  MainTabs.Tabs.SaveToFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
+  strs := TStringList.Create;
+  strs.Assign(MainTabs.Tabs);
+  strs[MainTabs.TabIndex] := '@' + strs[MainTabs.TabIndex];
+  strs.SaveToFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
+  strs.Free;
 end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: boolean);
