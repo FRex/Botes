@@ -3,6 +3,22 @@ Botes is a simple notes keeping application made with [Lazarus IDE](https://www.
 
 ![sshot0](sshots/sshot0.png)
 
+# Demo
+Here is a self contained zip with all you need to try botes out on 64 bit Windows: [link](https://ln.sync.com/dl/bf24dbdb0/g6crp9vj-cn8cfcbi-77hjbnv9-6nxajmcp).
+For reference the filename contains the commit hash from which it was built.
+
+# Controls
+* Ctrl + S - save changes.
+* Ctrl + N - open a new tab.
+* Ctrl + W - close current tab.
+* Esc - move focus between the text area and the serach bar.
+* Ctrl + Page Up/Down - switch between the open tabs.
+* Ctrl + Shift + Page Up/Down - move the currently open tab left/right.
+* Ctlr + F - use find (beware - it's quite crude).
+
+# Font
+For TSynEdit (the main text area) I use a popular but non-standard monoscpaced font called DejaVu Sans Mono that comes from a permissively licensed family of fonts called DejaVu Fonts. If you do not have it installed then the text area might look wrong, different than in the screenshots, use some fallback font, etc. You can get the DejaVu Fonts here: [link](https://dejavu-fonts.github.io/).
+
 # Idea
 The concept of botes materialized due to few varied reasons:
 * Loss of varius txt note files I kept during an urgent disk reformat after a virus struck
