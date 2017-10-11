@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
   Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, ActnList,
-  SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils;
+  SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils,
+  dateutils;
 
 type
 
@@ -16,6 +17,7 @@ type
 
   TForm1 = class(TForm)
     BeginFindAction: TAction;
+    StatusBar: TStatusBar;
     TextQueryStatusLabel: TLabel;
     TextQueryPanel: TPanel;
     SaveNotesAction: TAction;
@@ -102,6 +104,7 @@ begin
 
   try
     FAllLines.LoadFromFile(ExtractFilePath(Application.ExeName) + 'allnotes.txt');
+    StatusBar.Panels[2].Text := ExtractFilePath(Application.ExeName) + 'allnotes.txt';
   except
     on EFOpenError do
       MessageDlg('File not found', 'Failed to open file allnotes.txt.',
@@ -284,8 +287,21 @@ begin
     MoveCursorToNextFind;
 end;
 
-procedure TForm1.AwesomeBarChange(Sender: TObject);
+function PrettyPrintMilliSeconds(totalms: int64): string;
+var
+  s, ms: integer;
 begin
+  s := totalms div 1000;
+  ms := totalms mod 1000;
+  Result := Format('%d.%.3ds', [s, ms]);
+end;
+
+procedure TForm1.AwesomeBarChange(Sender: TObject);
+var
+  starttime: TDateTime;
+  tmp: string;
+begin
+  starttime := Now;
   MainTabs.Tabs[MainTabs.TabIndex] := AwesomeBar.Text;
   UpdateSuggestions;
   if AwesomeBar.Text = '' then
@@ -295,6 +311,12 @@ begin
   end
   else
     FilterTextByAwesomeBar;
+
+  tmp := Format('Lines: %d/%d', [TextEditor.Lines.Count, FAllLines.Count]);
+  StatusBar.Panels[0].Text := tmp;
+
+  tmp := 'Time: ' + PrettyPrintMilliSeconds(MilliSecondsBetween(Now, starttime));
+  StatusBar.Panels[1].Text := tmp;
 end;
 
 procedure TForm1.AwesomeBarEnter(Sender: TObject);

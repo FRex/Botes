@@ -54,7 +54,7 @@ object Form1: TForm1
     end
     inline TextEditor: TSynEdit
       Left = 2
-      Height = 485
+      Height = 456
       Top = 146
       Width = 935
       Align = alClient
@@ -570,6 +570,23 @@ object Form1: TForm1
         Constraints.MinWidth = 200
         ParentColor = False
       end
+    end
+    object StatusBar: TStatusBar
+      Left = 2
+      Height = 29
+      Top = 602
+      Width = 935
+      Panels = <      
+        item
+          Width = 275
+        end      
+        item
+          Width = 175
+        end      
+        item
+          Width = 50
+        end>
+      SimplePanel = False
     end
   end
   object MainTabsActionList: TActionList
