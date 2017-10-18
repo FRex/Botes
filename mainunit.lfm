@@ -491,7 +491,7 @@ object Form1: TForm1
       FoldedCodeColor.FrameColor = clGray
       MouseLinkColor.Background = clNone
       MouseLinkColor.Foreground = clBlue
-      LineHighlightColor.Background = clNone
+      LineHighlightColor.Background = clSkyBlue
       LineHighlightColor.Foreground = clNone
       OnSpecialLineMarkup = TextEditorSpecialLineMarkup
       inline SynLeftGutterPartList1: TSynGutterPartList
