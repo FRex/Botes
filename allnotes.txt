@@ -15972,3 +15972,22 @@ This Web site includes information about Project Gutenberg-tm,
 including how to make donations to the Project Gutenberg Literary
 Archive Foundation, how to help produce our new eBooks, and how to
 subscribe to our email newsletter to hear about new eBooks.
+#demo
+Hello, controlls are:
+Ctrl + S to save changes.
+Esc - switch between this text area and the bar at the top that now says 'demo'.
+Ctrl + Page Up/Down - move between tabs.
+Ctrl + Shift + Page Up/Down - move the current tab around on the tab bar.
+Ctrl + N - open a new tab.
+Ctrl + W - close current tab.
+
+Ctrl + F when in main text area will open a simple search
+
+When the suggestions list box is visible pressing down will go into it
+and pressing up when having first item selected in it or escape at
+any time will go back to editing the query edit box.
+
+Pressing enter will select the item from list box, query it and go to text area.
+Pressing backspace will go back to query edit box and put in it
+the item minus the last character.
+
