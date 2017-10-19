@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
   Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, ActnList,
   SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils,
-  dateutils;
+  dateutils, LCLType;
 
 type
 
@@ -17,6 +17,7 @@ type
 
   TForm1 = class(TForm)
     BeginFindAction: TAction;
+    Suggestions: TListBox;
     StatusBar: TStatusBar;
     TextQueryStatusLabel: TLabel;
     TextQueryPanel: TPanel;
@@ -31,14 +32,14 @@ type
     AwesomeBar: TEdit;
     MainTabs: TTabControl;
     TextQuery: TEdit;
-    Suggestions: TMemo;
     TextEditor: TSynEdit;
+    DeselectSuggestionsTimer: TTimer;
     procedure AwesomeBarChange(Sender: TObject);
     procedure AwesomeBarEnter(Sender: TObject);
-    procedure AwesomeBarExit(Sender: TObject);
-    procedure AwesomeBarKeyPress(Sender: TObject; var Key: char);
+    procedure AwesomeBarKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure BeginFindActionExecute(Sender: TObject);
     procedure CloseTabActionExecute(Sender: TObject);
+    procedure DeselectSuggestionsTimerTimer(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
@@ -52,6 +53,10 @@ type
     procedure NextTabActionExecute(Sender: TObject);
     procedure PrevTabActionExecute(Sender: TObject);
     procedure SaveNotesActionExecute(Sender: TObject);
+    procedure SuggestionsKeyDown(Sender: TObject; var Key: word;
+      Shift: TShiftState);
+    procedure TextEditorEnter(Sender: TObject);
+    procedure TextEditorExit(Sender: TObject);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
       var Special: boolean; Markup: TSynSelectedColor);
@@ -245,6 +250,48 @@ begin
   SaveNotes;
 end;
 
+procedure TForm1.SuggestionsKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
+var
+  str: string;
+begin
+  if Key = VK_ESCAPE then
+    AwesomeBar.SetFocus;
+
+  if (Key = VK_RETURN) and (Suggestions.ItemIndex <> -1) then
+  begin
+    AwesomeBar.Text := Suggestions.Items[Suggestions.ItemIndex];
+    TextEditor.SetFocus;
+  end;
+
+  if (Key = VK_UP) and (Suggestions.ItemIndex = 0) then
+  begin
+    AwesomeBar.SetFocus;
+    AwesomeBar.SelStart := Length(AwesomeBar.Text);
+    AwesomeBar.SelLength := 0;
+    DeselectSuggestionsTimer.Enabled := True;
+  end;
+
+  if (Key = VK_BACK) and (Suggestions.ItemIndex <> -1) then
+  begin
+    str := Suggestions.Items[Suggestions.ItemIndex];
+    AwesomeBar.Text := str.Substring(0, Length(str) - 1);
+    AwesomeBar.SetFocus;
+    AwesomeBar.SelStart := Length(AwesomeBar.Text);
+    AwesomeBar.SelLength := 0;
+    DeselectSuggestionsTimer.Enabled := True;
+  end;
+end;
+
+procedure TForm1.TextEditorEnter(Sender: TObject);
+begin
+  Suggestions.Visible := False;
+end;
+
+procedure TForm1.TextEditorExit(Sender: TObject);
+begin
+  Suggestions.Visible := True;
+end;
+
 procedure TForm1.TextEditorKeyPress(Sender: TObject; var Key: char);
 begin
   if Ord(Key) = 27 then
@@ -333,19 +380,22 @@ begin
       SaveNotes;
   end;
 
-  Suggestions.Visible := True;
   UpdateSuggestions;
+  Suggestions.ItemIndex := -1;
 end;
 
-procedure TForm1.AwesomeBarExit(Sender: TObject);
+procedure TForm1.AwesomeBarKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 begin
-  Suggestions.Visible := False;
-end;
-
-procedure TForm1.AwesomeBarKeyPress(Sender: TObject; var Key: char);
-begin
-  if (Ord(Key) = 27) or (Ord(Key) = 13) then
+  if (Key = VK_ESCAPE) or (Key = VK_RETURN) then
     TextEditor.SetFocus;
+
+  if Key = VK_DOWN then
+  begin
+    if Suggestions.Items.Count > 0 then
+      Suggestions.ItemIndex := 0;
+
+    Suggestions.SetFocus;
+  end;
 end;
 
 procedure TForm1.BeginFindActionExecute(Sender: TObject);
@@ -362,6 +412,12 @@ begin
     MainTabs.Tabs.Append('');
     MainTabsChange(MainTabs);
   end;
+end;
+
+procedure TForm1.DeselectSuggestionsTimerTimer(Sender: TObject);
+begin
+  Suggestions.ItemIndex := -1;
+  DeselectSuggestionsTimer.Enabled := False;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -444,11 +500,8 @@ procedure TForm1.UpdateSuggestions;
 var
   str: string;
   tmp: TStringList;
-  bmap: TBitmap;
-  cy: integer = 0;
 begin
   try
-    bmap := TBitmap.Create;
     tmp := TStringList.Create;
     for str in FAllTags do
       if str.StartsWith(AwesomeBar.Text) then
@@ -457,16 +510,9 @@ begin
     if tmp.Count = 0 then
       tmp.Assign(FAllTags);
 
-    tmp.Delimiter := #10;
-    Suggestions.Text := tmp.DelimitedText;
-    bmap.Canvas.Font := Suggestions.Font;
-    if Suggestions.Lines.Count <> 0 then
-      cy := bmap.Canvas.TextHeight(Suggestions.Lines[0]);
-
-    Suggestions.Height := Suggestions.Lines.Count * cy + cy div 2;
+    Suggestions.Items.Assign(tmp);
   finally
     tmp.Free;
-    bmap.Free;
   end;
 end;
 

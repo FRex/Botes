@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 623
+  Left = 481
   Height = 633
-  Top = 176
+  Top = 175
   Width = 939
   Caption = 'Botes'
   ClientHeight = 633
@@ -33,29 +33,25 @@ object Form1: TForm1
       Align = alTop
       OnChange = AwesomeBarChange
       OnEnter = AwesomeBarEnter
-      OnExit = AwesomeBarExit
-      OnKeyPress = AwesomeBarKeyPress
+      OnKeyDown = AwesomeBarKeyDown
       TabOrder = 2
       Text = 'AwesomeBar'
     end
-    object Suggestions: TMemo
+    object Suggestions: TListBox
       Left = 2
-      Height = 90
+      Height = 400
       Top = 56
       Width = 935
       Align = alTop
-      Lines.Strings = (
-        'Suggestions'
-      )
-      ReadOnly = True
-      TabOrder = 3
+      ItemHeight = 0
+      OnKeyDown = SuggestionsKeyDown
+      TabOrder = 4
       TabStop = False
-      Visible = False
     end
     inline TextEditor: TSynEdit
       Left = 2
-      Height = 456
-      Top = 146
+      Height = 146
+      Top = 456
       Width = 935
       Align = alClient
       Font.Height = -17
@@ -65,6 +61,8 @@ object Form1: TForm1
       ParentColor = False
       ParentFont = False
       TabOrder = 1
+      OnEnter = TextEditorEnter
+      OnExit = TextEditorExit
       OnKeyPress = TextEditorKeyPress
       Gutter.Width = 61
       Gutter.MouseActions = <>
@@ -536,7 +534,7 @@ object Form1: TForm1
       AnchorSideRight.Side = asrBottom
       Left = 376
       Height = 29
-      Top = 146
+      Top = 456
       Width = 561
       Anchors = [akTop, akRight]
       AutoSize = True
@@ -544,7 +542,7 @@ object Form1: TForm1
       ChildSizing.Layout = cclTopToBottomThenLeftToRight
       ClientHeight = 29
       ClientWidth = 561
-      TabOrder = 4
+      TabOrder = 3
       Visible = False
       object TextQuery: TEdit
         Left = 0
@@ -635,5 +633,12 @@ object Form1: TForm1
       OnExecute = BeginFindActionExecute
       ShortCut = 16454
     end
+  end
+  object DeselectSuggestionsTimer: TTimer
+    Enabled = False
+    Interval = 1
+    OnTimer = DeselectSuggestionsTimerTimer
+    left = 32
+    top = 77
   end
 end
