@@ -1,11 +1,14 @@
 # Botes
 Botes is a simple notes keeping application made with [Lazarus IDE](https://www.lazarus-ide.org/). Written mostly for personaly use, potentially unstable and buggy - backup your allnotes.txt if you use it!
 
-![sshot0](sshots/sshot0.png)
 
 # Demo
-Here is a self contained zip with all you need to try botes out on 64 bit Windows: [link](https://ln.sync.com/dl/6e05781d0/q8ep5yuh-96nc8gey-j6qwhdw6-yfrv3s9i).
+Here is a self contained zip with all you need to try botes out on 64 bit Windows: [link](https://ln.sync.com/dl/7fc162fe0/rg4fh47c-9zpxnra5-dmd6jfni-ffcxp7dw).
 For reference the filename contains the commit hash from which it was built.
+
+# Screens
+![sshot0](sshots/sshot0.png)
+
 
 # Controls
 * Ctrl + S - save changes.
