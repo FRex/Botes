@@ -36,6 +36,7 @@ type
     DeselectSuggestionsTimer: TTimer;
     procedure AwesomeBarChange(Sender: TObject);
     procedure AwesomeBarEnter(Sender: TObject);
+    procedure AwesomeBarExit(Sender: TObject);
     procedure AwesomeBarKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure BeginFindActionExecute(Sender: TObject);
     procedure CloseTabActionExecute(Sender: TObject);
@@ -56,7 +57,6 @@ type
     procedure SuggestionsKeyDown(Sender: TObject; var Key: word;
       Shift: TShiftState);
     procedure TextEditorEnter(Sender: TObject);
-    procedure TextEditorExit(Sender: TObject);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
       var Special: boolean; Markup: TSynSelectedColor);
@@ -287,11 +287,6 @@ begin
   Suggestions.Visible := False;
 end;
 
-procedure TForm1.TextEditorExit(Sender: TObject);
-begin
-  Suggestions.Visible := True;
-end;
-
 procedure TForm1.TextEditorKeyPress(Sender: TObject; var Key: char);
 begin
   if Ord(Key) = 27 then
@@ -381,7 +376,13 @@ begin
   end;
 
   UpdateSuggestions;
+  Suggestions.Visible := True;
   Suggestions.ItemIndex := -1;
+end;
+
+procedure TForm1.AwesomeBarExit(Sender: TObject);
+begin
+  Suggestions.Visible := False;
 end;
 
 procedure TForm1.AwesomeBarKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
