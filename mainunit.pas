@@ -57,6 +57,7 @@ type
     procedure SuggestionsKeyDown(Sender: TObject; var Key: word;
       Shift: TShiftState);
     procedure TextEditorEnter(Sender: TObject);
+    procedure TextEditorExit(Sender: TObject);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
     procedure TextEditorSpecialLineMarkup(Sender: TObject; Line: integer;
       var Special: boolean; Markup: TSynSelectedColor);
@@ -96,7 +97,8 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  markup: TSynEditMarkupHighlightAllCaret;
+  caretmarkup: TSynEditMarkupHighlightAllCaret;
+  matchmarkup: TSynEditMarkupHighlightAll;
   i: integer;
 begin
   FAllLines := TStringList.Create;
@@ -122,13 +124,16 @@ begin
 
   TextEditor.Lines.Assign(FAllLines);
 
-  markup := TSynEditMarkupHighlightAllCaret(
+  caretmarkup := TSynEditMarkupHighlightAllCaret(
     TextEditor.MarkupByClass[TSynEditMarkupHighlightAllCaret]);
-  markup.MarkupInfo.FrameColor := clSilver;
-  markup.MarkupInfo.Background := clGray;
-  markup.WaitTime := 100;
-  markup.Trim := True;
-  markup.FullWord := True;
+  caretmarkup.MarkupInfo.Background := clTeal;
+  caretmarkup.WaitTime := 100;
+  caretmarkup.Trim := True;
+  caretmarkup.FullWord := True;
+
+  matchmarkup := TSynEditMarkupHighlightAll(
+    TextEditor.MarkupByClass[TSynEditMarkupHighlightAll]);
+  matchmarkup.Enabled := False;
 
   try
     MainTabs.Tabs.LoadFromFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
@@ -285,6 +290,12 @@ end;
 procedure TForm1.TextEditorEnter(Sender: TObject);
 begin
   Suggestions.Visible := False;
+  TextEditor.MarkupByClass[TSynEditMarkupHighlightAllCaret].Enabled := True;
+end;
+
+procedure TForm1.TextEditorExit(Sender: TObject);
+begin
+  TextEditor.MarkupByClass[TSynEditMarkupHighlightAllCaret].Enabled := False;
 end;
 
 procedure TForm1.TextEditorKeyPress(Sender: TObject; var Key: char);
@@ -305,19 +316,28 @@ begin
 end;
 
 procedure TForm1.TextQueryChange(Sender: TObject);
+var
+  matchmarkup: TSynEditMarkupHighlightAll;
 begin
   RefreshFoundPoints;
+  matchmarkup := TSynEditMarkupHighlightAll(
+    TextEditor.MarkupByClass[TSynEditMarkupHighlightAll]);
+  matchmarkup.SearchString := TextQuery.Text;
+  TextQueryStatusLabel.Caption :=
+    Format('Find: %d results', [Length(FFoundTextPoints)]);
 end;
 
 procedure TForm1.TextQueryEnter(Sender: TObject);
 begin
   RefreshFoundPoints;
   MoveCursorToNextFind;
+  TextEditor.MarkupByClass[TSynEditMarkupHighlightAll].Enabled := True;
 end;
 
 procedure TForm1.TextQueryExit(Sender: TObject);
 begin
   TextQueryPanel.Hide;
+  TextEditor.MarkupByClass[TSynEditMarkupHighlightAll].Enabled := False;
 end;
 
 procedure TForm1.TextQueryKeyPress(Sender: TObject; var Key: char);
