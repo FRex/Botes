@@ -36,7 +36,6 @@ type
     DeselectSuggestionsTimer: TTimer;
     procedure AwesomeBarChange(Sender: TObject);
     procedure AwesomeBarEnter(Sender: TObject);
-    procedure AwesomeBarExit(Sender: TObject);
     procedure AwesomeBarKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
     procedure BeginFindActionExecute(Sender: TObject);
     procedure CloseTabActionExecute(Sender: TObject);
@@ -329,6 +328,7 @@ end;
 
 procedure TForm1.TextQueryEnter(Sender: TObject);
 begin
+  Suggestions.Visible := False;
   RefreshFoundPoints;
   MoveCursorToNextFind;
   TextEditor.MarkupByClass[TSynEditMarkupHighlightAll].Enabled := True;
@@ -398,11 +398,6 @@ begin
   UpdateSuggestions;
   Suggestions.Visible := True;
   Suggestions.ItemIndex := -1;
-end;
-
-procedure TForm1.AwesomeBarExit(Sender: TObject);
-begin
-  Suggestions.Visible := False;
 end;
 
 procedure TForm1.AwesomeBarKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
