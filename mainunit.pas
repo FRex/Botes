@@ -421,13 +421,32 @@ begin
 end;
 
 procedure TForm1.CloseTabActionExecute(Sender: TObject);
+var
+  ans: TModalResult;
 begin
+  //check for modification first
+  if TextEditor.Modified then
+  begin
+    ans := QueryUnsavedChanges;
+    if ans = mrCancel then
+      Exit;
+
+    if ans = mrYes then
+      SaveNotes;
+
+    if ans = mrNo then
+      TextEditor.Modified := False;
+  end; //if
+
+  //only close if unmodified or cancel wasn't picked above
   MainTabs.Tabs.Delete(MainTabs.TabIndex);
   if MainTabs.Tabs.Count = 0 then
   begin
     MainTabs.Tabs.Append('');
     MainTabsChange(MainTabs);
   end;
+  FilterTextByAwesomeBar;
+
 end;
 
 procedure TForm1.DeselectSuggestionsTimerTimer(Sender: TObject);
