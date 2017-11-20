@@ -94,6 +94,11 @@ begin
   Result := line.StartsWith('#');
 end;
 
+function TagLineWithTag(const line, tag: string): boolean;
+begin
+  Result := IsTagLine(line) and (line + ' ').Contains('#' + tag + ' ');
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   caretmarkup: TSynEditMarkupHighlightAllCaret;
@@ -309,9 +314,17 @@ begin
   if IsTagLine(TextEditor.Lines[Line - 1]) then
   begin
     Special := True;
-    Markup.Background := clMoneyGreen;
-    Markup.Foreground := clBlack;
-  end;
+    if TagLineWithTag(TextEditor.Lines[Line - 1], AwesomeBar.Text) then
+    begin
+      Markup.Background := clMoneyGreen;
+      Markup.Foreground := clBlack;
+    end
+    else
+    begin
+      Markup.Background := clMaroon;
+      Markup.Foreground := clCream;
+    end;
+  end; //if IsTagLine(linestr)
 end;
 
 procedure TForm1.TextQueryChange(Sender: TObject);
@@ -517,7 +530,7 @@ begin
     for str in FAllLines do
     begin
       if IsTagLine(str) then
-        inseg := (str + ' ').Contains('#' + AwesomeBar.Text + ' ');
+        inseg := TagLineWithTag(str, AwesomeBar.Text);
 
       if inseg then
         tmp.Add(str)
