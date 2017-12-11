@@ -71,7 +71,7 @@ type
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
     procedure UpdateSuggestions;
-    procedure SaveNotes;
+    function SaveNotes: boolean;
     function QueryUnsavedChanges: TModalResult;
     procedure RefreshFoundPoints;
     procedure MoveCursorToNextFind;
@@ -205,7 +205,7 @@ begin
       AllowChange := False;
 
     if ans = mrYes then
-      SaveNotes;
+      AllowChange := SaveNotes;
 
     if ans = mrNo then
       TextEditor.Modified := False;
@@ -580,14 +580,27 @@ begin
   end;
 end;
 
-procedure TForm1.SaveNotes;
+function TForm1.SaveNotes: boolean;
 begin
+  //first line of non empty text area must be a tag line due to how the file
+  //format and app itself is built technically and conceptually
+  //if first line isn't so then quit and don't touch any files nor mark content saved
+  //note: even if line count is 0 we gotta save to handle the
+  //case of someone deleting all notes in a specific tag
+  if TextEditor.Lines.Count <> 0 then
+    if not IsTagLine(TextEditor.Lines[0]) then
+    begin
+      MessageDlg('Error', 'First line of text must be a tagline.', mtError, [mbOK], 0);
+      Exit(False);
+    end;
+
   FAllLines.Assign(FDiscardedLines);
   FAllLines.AddStrings(TextEditor.Lines);
   FAllLines.SaveToFile(ExtractFilePath(Application.ExeName) + 'allnotes.txt');
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
+  Exit(True);
 end;
 
 function TForm1.QueryUnsavedChanges: TModalResult;
