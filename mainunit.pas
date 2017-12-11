@@ -90,8 +90,24 @@ implementation
 { TForm1 }
 
 function IsTagLine(const line: string): boolean;
+var
+  i: integer;
 begin
-  Result := line.StartsWith('#');
+  //a tag line must start with # and be longer than 2
+  if (not line.StartsWith('#')) or (Length(line) < 2) then
+    Exit(False);
+
+  //a tagline must not have hashes inside words
+  for i := 2 to Length(line) do
+    if (line[i] = '#') and (line[i - 1] <> ' ') then
+      Exit(False);
+
+  //a tagline must not contain words without hash in front
+  for i := 2 to Length(line) do
+    if (line[i] <> '#') and (line[i] <> ' ') and (line[i - 1] = ' ') then
+      Exit(False);
+
+  Exit(True);
 end;
 
 function TagLineWithTag(const line, tag: string): boolean;
