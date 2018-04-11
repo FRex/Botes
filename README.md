@@ -34,6 +34,9 @@ The idea behind botes is to be a simple, highly shortcut and keyborad controlabl
 
 A section is simply a block of text from one line with one or more hashtags until another such line or end of file. All blocks tagged with a certain hashtag can be looked up by typing the hashtag (without the hash sign) into the bar at the top. There are also tabs to have more than one section open at once but it still works within a single file, these are saved in tabs.txt and reopened at next launch.
 
+I wrote it because I couldn't find an application that did all I wanted as well as I wanted.
+You can read more about what I was looking for here: [link](https://frex.github.io/article/perfect-notes.html).
+
 # Building
 There is an .lpi file included, it should allow buildiding out of the box on a fresh Lazarus installation. You can also ask me for an exe for Windows if you really want one. Should also build out of the box on other toolkits and systems LCL supports but that wasn't tested.
 
