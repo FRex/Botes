@@ -115,11 +115,17 @@ begin
   Result := IsTagLine(line) and (line + ' ').Contains('#' + tag + ' ');
 end;
 
+function GetFileNearExe(const fname: string): string;
+begin
+  Result := ExtractFilePath(Application.ExeName) + fname;
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   caretmarkup: TSynEditMarkupHighlightAllCaret;
   matchmarkup: TSynEditMarkupHighlightAll;
   i: integer;
+  allnotespath: string;
 begin
   FAllLines := TStringList.Create;
   FAllLines.LineBreak := #10;
@@ -130,11 +136,12 @@ begin
   MainTabs.Tabs.LineBreak := #10;
 
   try
-    FAllLines.LoadFromFile(ExtractFilePath(Application.ExeName) + 'allnotes.txt');
-    StatusBar.Panels[2].Text := ExtractFilePath(Application.ExeName) + 'allnotes.txt';
+    allnotespath := GetFileNearExe('allnotes.txt');
+    FAllLines.LoadFromFile(allnotespath);
+    StatusBar.Panels[2].Text := allnotespath;
   except
     on EFOpenError do
-      MessageDlg('File not found', 'Failed to open file allnotes.txt.',
+      MessageDlg('File not found', Format('Failed to open file: %s', [allnotespath]),
         mtError, [mbOK], 0);
   end;
 
@@ -156,7 +163,7 @@ begin
   matchmarkup.Enabled := False;
 
   try
-    MainTabs.Tabs.LoadFromFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
+    MainTabs.Tabs.LoadFromFile(GetFileNearExe('tabs.txt'));
     for i := 0 to MainTabs.Tabs.Count - 1 do
       if (length(MainTabs.Tabs[i]) > 0) and (MainTabs.Tabs[i][1] = '@') then
       begin
