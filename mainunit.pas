@@ -134,6 +134,7 @@ begin
   FAllTags := TStringList.Create;
   FAllLines.LineBreak := #10;
   MainTabs.Tabs.LineBreak := #10;
+  MainTabs.Options := MainTabs.Options + [nboDoChangeOnSetIndex];
 
   try
     allnotespath := GetFileNearExe('allnotes.txt');
