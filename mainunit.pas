@@ -499,7 +499,7 @@ begin
   strs := TStringList.Create;
   strs.Assign(MainTabs.Tabs);
   strs[MainTabs.TabIndex] := '@' + strs[MainTabs.TabIndex];
-  strs.SaveToFile(ExtractFilePath(Application.ExeName) + 'tabs.txt');
+  strs.SaveToFile(GetFileNearExe('tabs.txt'));
   strs.Free;
 end;
 
@@ -608,7 +608,7 @@ begin
 
   FAllLines.Assign(FDiscardedLines);
   FAllLines.AddStrings(TextEditor.Lines);
-  FAllLines.SaveToFile(ExtractFilePath(Application.ExeName) + 'allnotes.txt');
+  FAllLines.SaveToFile(GetFileNearExe('allnotes.txt'));
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
