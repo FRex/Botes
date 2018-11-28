@@ -590,6 +590,10 @@ end;
 
 function TForm1.SaveNotes: boolean;
 begin
+  //fix for below check - since 'no lines' = 'one empty line' kinda
+  if (TextEditor.Lines.Count = 1) and (TextEditor.Lines[0] = '') then
+    TextEditor.Lines.Clear;
+
   //first line of non empty text area must be a tag line due to how the file
   //format and app itself is built technically and conceptually
   //if first line isn't so then quit and don't touch any files nor mark content saved
