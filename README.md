@@ -1,6 +1,12 @@
 # Botes
 Botes is a simple notes keeping application made with [Lazarus IDE](https://www.lazarus-ide.org/). Written mostly for personaly use, potentially unstable and buggy - backup your allnotes.txt if you use it!
 
+For backup/convenience if a directory named `old` is present near `botes.exe` then on each save in addition to saving current notes to `allnotes.txt` a file
+named `allnotes-yyyy-mm-dd-hh-nn.txt` (`mm` means month, `nn` means minutes, both are 0 padded thus alaways two digits) with same contents will be saved to `old`.
+Those backup files are never read, only written to (sometimes overwritten if notes are saved more than once within a single minute) and no other files are
+touched in this directory at all. This means it might be very worthwhile to compress those files individually or into an archive, especially since
+they are largely (ASCII) text and very similar to each other and saved very frequently so the space savings will be very large.
+
 
 # Demo
 Here is a self contained zip with all you need to try botes out on 64 bit Windows: [link](https://ln.sync.com/dl/23c5f7410/grkq6yfi-fzcuxrra-v4juvnf6-gv9gt7z2).
