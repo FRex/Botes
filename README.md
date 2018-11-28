@@ -5,6 +5,8 @@ Botes is a simple notes keeping application made with [Lazarus IDE](https://www.
 # Demo
 Here is a self contained zip with all you need to try botes out on 64 bit Windows: [link](https://ln.sync.com/dl/23c5f7410/grkq6yfi-fzcuxrra-v4juvnf6-gv9gt7z2).
 For reference the filename contains the commit hash from which it was built.
+If it's out of date and you want a fresh one but don't want to bother with installing
+Lazarus yourself then drop me an email or open an issue and I'll build it.
 
 # Screens
 ![sshot0](sshots/sshot0.png)
