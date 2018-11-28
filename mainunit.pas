@@ -588,6 +588,19 @@ begin
   end;
 end;
 
+procedure SaveToOld(list: TStrings);
+var
+  timestamp, dname, fname: string;
+begin
+  dname := GetFileNearExe('old');
+  if not DirectoryExists(dname) then
+    Exit;
+
+  DateTimeToString(timestamp, 'yyyy-mm-dd-hh-nn', Now);
+  fname := 'allnotes-' + timestamp + '.txt';
+  list.SaveToFile(dname + DirectorySeparator + fname);
+end;
+
 function TForm1.SaveNotes: boolean;
 begin
   //fix for below check - since 'no lines' = 'one empty line' kinda
@@ -609,6 +622,7 @@ begin
   FAllLines.Assign(FDiscardedLines);
   FAllLines.AddStrings(TextEditor.Lines);
   FAllLines.SaveToFile(GetFileNearExe('allnotes.txt'));
+  SaveToOld(FAllLines);
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
