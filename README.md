@@ -38,7 +38,7 @@ Lazarus yourself then drop me an email or open an issue and I'll build it.
 
 
 # Font
-For TSynEdit (the main text area) I use a popular but non-standard monoscpaced font called DejaVu Sans Mono
+For TSynEdit (the main text area) I use a popular but non-standard monospaced font called `DejaVu Sans Mono`
 that comes from a permissively licensed family of fonts called DejaVu Fonts. If you do not have it installed
 then the text area might look wrong, different than in the screenshots, use some fallback font, etc. You can
 get the DejaVu Fonts here: [link](https://dejavu-fonts.github.io/).
