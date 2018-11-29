@@ -157,8 +157,8 @@ begin
       tsize += fsize;
   end;
 
+  Result := 'Old: ' + IntToStr(list.Count) + ' files, ' + PrettyPrintFileSize(tsize);
   list.Free;
-  Result := 'Old: ' + PrettyPrintFileSize(tsize);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
