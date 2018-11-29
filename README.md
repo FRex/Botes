@@ -12,6 +12,7 @@ Those backup files are never read, only written to (sometimes overwritten if not
 a single minute) and no other files are touched in this directory at all. This means it might be very worthwhile to
 compress those files individually or into an archive, especially since they are largely (ASCII) text and very
 similar to each other and saved very frequently so the space savings will be very large.
+The total size of all files in `old` directory is also displayed on the status bar.
 
 
 # Demo
@@ -33,6 +34,7 @@ Lazarus yourself then drop me an email or open an issue and I'll build it.
 * Ctrl + Page Up/Down - switch between the open tabs.
 * Ctrl + Shift + Page Up/Down - move the currently open tab left/right.
 * Ctlr + F - use find (beware - it's quite crude).
+* Double click on status bar - open directory `Botes` is in.
 
 
 # Font
