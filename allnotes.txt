@@ -15983,6 +15983,11 @@ Ctrl + W - close current tab.
 
 Ctrl + F when in main text area will open a simple search
 
+Double click on status bar to open the directory Botes is in.
+
+Create old directory there to get a duplicate of every saved file.
+See README.md for more details.
+
 When the suggestions list box is visible pressing down will go into it
 and pressing up when having first item selected in it or escape at
 any time will go back to editing the query edit box.
