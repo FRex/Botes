@@ -601,6 +601,7 @@ object Form1: TForm1
           Width = 50
         end>
       SimplePanel = False
+      OnDblClick = StatusBarDblClick
     end
   end
   object MainTabsActionList: TActionList

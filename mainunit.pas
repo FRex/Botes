@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
   Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, ActnList,
   SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils,
-  dateutils, LCLType, Math;
+  dateutils, LCLType, Math, LCLIntf;
 
 type
 
@@ -53,6 +53,7 @@ type
     procedure NextTabActionExecute(Sender: TObject);
     procedure PrevTabActionExecute(Sender: TObject);
     procedure SaveNotesActionExecute(Sender: TObject);
+    procedure StatusBarDblClick(Sender: TObject);
     procedure SuggestionsKeyDown(Sender: TObject; var Key: word;
       Shift: TShiftState);
     procedure TextEditorEnter(Sender: TObject);
@@ -321,6 +322,11 @@ end;
 procedure TForm1.SaveNotesActionExecute(Sender: TObject);
 begin
   SaveNotes;
+end;
+
+procedure TForm1.StatusBarDblClick(Sender: TObject);
+begin
+  OpenDocument(GetFileNearExe(''));
 end;
 
 procedure TForm1.SuggestionsKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
