@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
   Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, ActnList,
   SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils,
-  dateutils, LCLType;
+  dateutils, LCLType, Math;
 
 type
 
@@ -120,6 +120,46 @@ begin
   Result := ExtractFilePath(Application.ExeName) + fname;
 end;
 
+function PrettyPrintFileSize(size: int64): string;
+begin
+  if size < intpower(1024.0, 1) then
+    Exit(IntToStr(size) + ' Bytes');
+
+  if size < intpower(1024.0, 2) then
+    Exit(FloatToStr(RoundTo(size / intpower(1024.0, 1), -3)) + ' KiB');
+
+  if size < intpower(1024.0, 3) then
+    Exit(FloatToStr(RoundTo(size / intpower(1024.0, 2), -3)) + ' MiB');
+
+  if size < intpower(1024.0, 4) then
+    Exit(FloatToStr(RoundTo(size / intpower(1024.0, 3), -3)) + ' GiB');
+
+  Result := FloatToStr(RoundTo(size / intpower(1024.0, 4), -3)) + ' TiB';
+end;
+
+function GetOldDirSize: string;
+var
+  oname, fname: string;
+  list: TStringList;
+  fsize, tsize: int64;
+begin
+  oname := GetFileNearExe('old');
+  if not DirectoryExists(oname) then
+    Exit('Old: no directory.');
+
+  list := FindAllFiles(oname);
+  tsize := 0;
+  for fname in list do
+  begin
+    fsize := FileSize(fname);
+    if fsize > 0 then
+      tsize += fsize;
+  end;
+
+  list.Free;
+  Result := 'Old: ' + PrettyPrintFileSize(tsize);
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   caretmarkup: TSynEditMarkupHighlightAllCaret;
@@ -135,11 +175,11 @@ begin
   FAllLines.LineBreak := #10;
   MainTabs.Tabs.LineBreak := #10;
   MainTabs.Options := MainTabs.Options + [nboDoChangeOnSetIndex];
-
+  StatusBar.Panels[2].Text := GetOldDirSize;
   try
     allnotespath := GetFileNearExe('allnotes.txt');
     FAllLines.LoadFromFile(allnotespath);
-    StatusBar.Panels[2].Text := allnotespath;
+    StatusBar.Panels[3].Text := allnotespath;
   except
     on EFOpenError do
       MessageDlg('File not found', Format('Failed to open file: %s', [allnotespath]),
@@ -623,6 +663,7 @@ begin
   FAllLines.AddStrings(TextEditor.Lines);
   FAllLines.SaveToFile(GetFileNearExe('allnotes.txt'));
   SaveToOld(FAllLines);
+  StatusBar.Panels[2].Text := GetOldDirSize;
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
