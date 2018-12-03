@@ -68,6 +68,7 @@ type
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
     FFoundTextPoints: array of TPoint; //xy of caret for each found text
+    FAllTagCount, FSelectedTagCount: integer;
 
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
@@ -87,6 +88,13 @@ var
 implementation
 
 {$R *.lfm}
+
+const
+  LineCountPanel = 0;
+  TagCountPanel = 1;
+  QueryTimePanel = 2;
+  OldSizePanel = 3;
+  NotesPathPanel = 4;
 
 { TForm1 }
 
@@ -176,11 +184,11 @@ begin
   FAllLines.LineBreak := #10;
   MainTabs.Tabs.LineBreak := #10;
   MainTabs.Options := MainTabs.Options + [nboDoChangeOnSetIndex];
-  StatusBar.Panels[2].Text := GetOldDirSize;
+  StatusBar.Panels[OldSizePanel].Text := GetOldDirSize;
   try
     allnotespath := GetFileNearExe('allnotes.txt');
     FAllLines.LoadFromFile(allnotespath);
-    StatusBar.Panels[3].Text := allnotespath;
+    StatusBar.Panels[NotesPathPanel].Text := allnotespath;
   except
     on EFOpenError do
       MessageDlg('File not found', Format('Failed to open file: %s', [allnotespath]),
@@ -445,23 +453,36 @@ procedure TForm1.AwesomeBarChange(Sender: TObject);
 var
   starttime: TDateTime;
   tmp: string;
+  alllines: boolean;
 begin
   starttime := Now;
   MainTabs.Tabs[MainTabs.TabIndex] := AwesomeBar.Text;
   UpdateSuggestions;
+  alllines := False;
   if AwesomeBar.Text = '' then
   begin
     FDiscardedLines.Clear;
     TextEditor.Lines.Assign(FAllLines);
+    alllines := True;
   end
   else
     FilterTextByAwesomeBar;
 
   tmp := Format('Lines: %d/%d', [TextEditor.Lines.Count, FAllLines.Count]);
-  StatusBar.Panels[0].Text := tmp;
+  StatusBar.Panels[LineCountPanel].Text := tmp;
+
+  if alllines then
+  begin
+    StatusBar.Panels[TagCountPanel].Text := 'Tags: all';
+  end
+  else
+  begin
+    tmp := Format('Tags: %d/%d', [FSelectedTagCount, FAllTagCount]);
+    StatusBar.Panels[TagCountPanel].Text := tmp;
+  end;
 
   tmp := 'Time: ' + PrettyPrintMilliSeconds(MilliSecondsBetween(Now, starttime));
-  StatusBar.Panels[1].Text := tmp;
+  StatusBar.Panels[QueryTimePanel].Text := tmp;
 end;
 
 procedure TForm1.AwesomeBarEnter(Sender: TObject);
@@ -597,10 +618,17 @@ begin
     TextEditor.Lines.Clear;
     FDiscardedLines.Clear;
     inseg := False;
+    FAllTagCount := 0;
+    FSelectedTagCount := 0;
     for str in FAllLines do
     begin
       if IsTagLine(str) then
+      begin
         inseg := TagLineWithTag(str, AwesomeBar.Text);
+        FAllTagCount += 1;
+        if inseg then
+          FSelectedTagCount += 1;
+      end;
 
       if inseg then
         tmp.Add(str)
@@ -669,7 +697,7 @@ begin
   FAllLines.AddStrings(TextEditor.Lines);
   FAllLines.SaveToFile(GetFileNearExe('allnotes.txt'));
   SaveToOld(FAllLines);
-  StatusBar.Panels[2].Text := GetOldDirSize;
+  StatusBar.Panels[OldSizePanel].Text := GetOldDirSize;
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
