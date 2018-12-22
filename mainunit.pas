@@ -581,9 +581,14 @@ begin
   end;
 
   ans := QueryUnsavedChanges;
-  CanClose := (ans <> mrCancel);
   if ans = mrYes then
-    SaveNotes;
+    CanClose := SaveNotes;
+
+  if ans = mrNo then
+    CanClose := True;
+
+  if ans = mrCancel then
+    CanClose := False;
 end;
 
 procedure TForm1.CollectAllTags;
