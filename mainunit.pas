@@ -403,6 +403,14 @@ begin
       Markup.Foreground := clCream;
     end;
   end; //if IsTagLine(linestr)
+
+  //special case for UNSAVEABLE edit
+  if (Line = 1) and (not IsTagLine(TextEditor.Lines[0])) then
+  begin
+    Special := True;
+    Markup.Background := clMaroon;
+    Markup.Foreground := clCream;
+  end;
 end;
 
 procedure TForm1.TextQueryChange(Sender: TObject);
