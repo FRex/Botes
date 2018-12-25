@@ -386,6 +386,8 @@ end;
 
 procedure TForm1.TextEditorSpecialLineMarkup(Sender: TObject;
   Line: integer; var Special: boolean; Markup: TSynSelectedColor);
+var
+  notempty: boolean;
 begin
   if IsTagLine(TextEditor.Lines[Line - 1]) then
   begin
@@ -402,8 +404,11 @@ begin
     end;
   end; //if IsTagLine(linestr)
 
-  //special case for UNSAVEABLE edit
-  if (Line = 1) and (not IsTagLine(TextEditor.Lines[0])) then
+  //special case for an UNSAVEABLE edit: highlight first line if it's not a tag
+  //line except if it's empty AND the only line in the editor which can be saved
+  //because it's a special case when deleting all notes in a given tag
+  notempty := not ((TextEditor.Lines.Count = 1) and (TextEditor.Lines[0] = ''));
+  if (Line = 1) and (not IsTagLine(TextEditor.Lines[0])) and notempty then
   begin
     Special := True;
     Markup.Background := clMaroon;
