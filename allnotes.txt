@@ -15979,6 +15979,8 @@ Esc - switch between this text area and the bar at the top that now says 'demo'.
 Ctrl + Page Up/Down - move between tabs.
 Ctrl + Shift + Page Up/Down - move the current tab around on the tab bar.
 Ctrl + N - open a new tab.
+Ctrl + T - open a new tab.
+Ctrl + Shift + T - undo closing last tab.
 Ctrl + W - close current tab.
 
 Ctrl + F when in main text area will open a simple search

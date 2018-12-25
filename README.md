@@ -29,6 +29,8 @@ Lazarus yourself then drop me an email or open an issue and I'll build it.
 # Controls
 * Ctrl + S - save changes.
 * Ctrl + N - open a new tab.
+* Ctrl + T - open a new tab.
+* Ctrl + Shift + T - undo closing last tab.
 * Ctrl + W - close current tab.
 * Esc - move focus between the text area and the serach bar.
 * Ctrl + Page Up/Down - switch between the open tabs.

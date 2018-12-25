@@ -19,8 +19,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="388"/>
-        <CursorPos X="56" Y="407"/>
+        <TopLine Value="444"/>
+        <CursorPos X="52" Y="459"/>
         <UsageCount Value="54"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -90,10 +90,11 @@
       <Unit10>
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="34"/>
-        <CursorPos X="2" Y="52"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="166"/>
+        <CursorPos X="3" Y="179"/>
         <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit10>
       <Unit11>
         <Filename Value="C:\lazarus\lcl\lcltype.pp"/>
@@ -126,7 +127,7 @@
       <Unit15>
         <Filename Value="C:\lazarus\components\synedit\synedittypes.pp"/>
         <UnitName Value="SynEditTypes"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="64"/>
         <CursorPos X="3" Y="83"/>
         <UsageCount Value="11"/>
@@ -157,7 +158,7 @@
       <Unit19>
         <Filename Value="C:\lazarus\lcl\graphics.pp"/>
         <UnitName Value="Graphics"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="251"/>
         <CursorPos X="9" Y="275"/>
         <UsageCount Value="11"/>
@@ -228,7 +229,7 @@
       <Unit28>
         <Filename Value="C:\lazarus\components\synedit\syneditmarkuphighall.pp"/>
         <UnitName Value="SynEditMarkupHighAll"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="181"/>
         <CursorPos X="14" Y="198"/>
         <UsageCount Value="12"/>
@@ -244,130 +245,134 @@
       </Unit29>
       <Unit30>
         <Filename Value="C:\lazarus\fpc\3.0.4\source\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="695"/>
         <CursorPos X="14" Y="705"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit30>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="323" Column="24" TopLine="315"/>
+        <Caret Line="136" Column="56" TopLine="130"/>
       </Position1>
       <Position2>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="135" Column="3" TopLine="110"/>
+        <Caret Line="327" Column="30" TopLine="318"/>
       </Position2>
       <Position3>
-        <Filename Value="mainunit.pas"/>
-        <Caret Line="334" Column="3" TopLine="332"/>
+        <Filename Value="C:\lazarus\components\synedit\syneditmarkuphighall.pp"/>
+        <Caret Line="198" Column="14" TopLine="181"/>
       </Position3>
       <Position4>
-        <Filename Value="mainunit.pas"/>
-        <Caret Line="336" Column="57" TopLine="318"/>
+        <Filename Value="C:\lazarus\components\synedit\synedittypes.pp"/>
+        <Caret Line="93" Column="3" TopLine="76"/>
       </Position4>
       <Position5>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="136" Column="56" TopLine="130"/>
+        <Caret Line="325" Column="44" TopLine="318"/>
       </Position5>
       <Position6>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="327" Column="30" TopLine="318"/>
+        <Caret Line="77" Column="15" TopLine="76"/>
       </Position6>
       <Position7>
-        <Filename Value="C:\lazarus\components\synedit\syneditmarkuphighall.pp"/>
-        <Caret Line="198" Column="14" TopLine="181"/>
+        <Filename Value="mainunit.pas"/>
+        <Caret Line="318" Column="51" TopLine="312"/>
       </Position7>
       <Position8>
-        <Filename Value="C:\lazarus\components\synedit\synedittypes.pp"/>
-        <Caret Line="93" Column="3" TopLine="76"/>
+        <Filename Value="mainunit.pas"/>
+        <Caret Line="570" Column="14" TopLine="546"/>
       </Position8>
       <Position9>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="325" Column="44" TopLine="318"/>
+        <Caret Line="315" Column="11" TopLine="310"/>
       </Position9>
       <Position10>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="77" Column="15" TopLine="76"/>
+        <Caret Line="577" Column="5" TopLine="569"/>
       </Position10>
       <Position11>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="318" Column="51" TopLine="312"/>
+        <Caret Line="152" Column="17" TopLine="132"/>
       </Position11>
       <Position12>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="570" Column="14" TopLine="546"/>
+        <Caret Line="173" Column="32" TopLine="150"/>
       </Position12>
       <Position13>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="315" Column="11" TopLine="310"/>
+        <Caret Line="192" Column="12" TopLine="164"/>
       </Position13>
       <Position14>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="577" Column="5" TopLine="569"/>
+        <Caret Line="591" Column="5" TopLine="569"/>
       </Position14>
       <Position15>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="152" Column="17" TopLine="132"/>
+        <Caret Line="444" Column="30" TopLine="400"/>
       </Position15>
       <Position16>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="173" Column="32" TopLine="150"/>
+        <Caret Line="211" Column="25" TopLine="209"/>
       </Position16>
       <Position17>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="192" Column="12" TopLine="164"/>
+        <Caret Line="71" Column="38" TopLine="59"/>
       </Position17>
       <Position18>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="591" Column="5" TopLine="569"/>
+        <Caret Line="617" Column="34" TopLine="607"/>
       </Position18>
       <Position19>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="444" Column="30" TopLine="400"/>
+        <Caret Line="471" Column="32" TopLine="452"/>
       </Position19>
       <Position20>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="211" Column="25" TopLine="209"/>
+        <Caret Line="461" Column="28" TopLine="452"/>
       </Position20>
       <Position21>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="71" Column="38" TopLine="59"/>
+        <Caret Line="81" Column="30" TopLine="68"/>
       </Position21>
       <Position22>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="617" Column="34" TopLine="607"/>
+        <Caret Line="473" Column="46" TopLine="465"/>
       </Position22>
       <Position23>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="471" Column="32" TopLine="452"/>
+        <Caret Line="495" Column="23" TopLine="474"/>
       </Position23>
       <Position24>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="461" Column="28" TopLine="452"/>
+        <Caret Line="566" Column="3" TopLine="562"/>
       </Position24>
       <Position25>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="81" Column="30" TopLine="68"/>
+        <Caret Line="586" Column="19" TopLine="573"/>
       </Position25>
       <Position26>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="473" Column="46" TopLine="465"/>
+        <Caret Line="399" Column="42" TopLine="424"/>
       </Position26>
       <Position27>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="495" Column="23" TopLine="474"/>
+        <Caret Line="401" Column="42" TopLine="401"/>
       </Position27>
       <Position28>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="566" Column="3" TopLine="562"/>
+        <Caret Line="455" Column="3" TopLine="342"/>
       </Position28>
       <Position29>
         <Filename Value="mainunit.pas"/>
-        <Caret Line="586" Column="19" TopLine="573"/>
+        <Caret Line="460" Column="22" TopLine="444"/>
       </Position29>
+      <Position30>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <Caret Line="1693" Column="14" TopLine="1682"/>
+      </Position30>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

@@ -10,12 +10,16 @@ uses
   SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils,
   dateutils, LCLType, Math, LCLIntf;
 
+const
+  UndoCloseTabHistoryMaxSize = 100;
+
 type
 
   { TForm1 }
 
 
   TForm1 = class(TForm)
+    UndoCloseTabAction: TAction;
     BeginFindAction: TAction;
     Suggestions: TListBox;
     StatusBar: TStatusBar;
@@ -65,10 +69,13 @@ type
     procedure TextQueryEnter(Sender: TObject);
     procedure TextQueryExit(Sender: TObject);
     procedure TextQueryKeyPress(Sender: TObject; var Key: char);
+    procedure UndoCloseTabActionExecute(Sender: TObject);
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
     FFoundTextPoints: array of TPoint; //xy of caret for each found text
     FAllTagCount, FSelectedTagCount: integer;
+    FUndoCloseTabHistory: array [0..UndoCloseTabHistoryMaxSize] of string;
+    FUndoCloseTabHistoryUsed: integer;
 
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
@@ -185,6 +192,8 @@ begin
   MainTabs.Tabs.LineBreak := #10;
   MainTabs.Options := MainTabs.Options + [nboDoChangeOnSetIndex];
   StatusBar.Panels[OldSizePanel].Text := GetOldDirSize;
+  FUndoCloseTabHistoryUsed := 0;
+
   try
     allnotespath := GetFileNearExe('allnotes.txt');
     FAllLines.LoadFromFile(allnotespath);
@@ -448,6 +457,25 @@ begin
     MoveCursorToNextFind;
 end;
 
+procedure TForm1.UndoCloseTabActionExecute(Sender: TObject);
+begin
+  //FUndoCloseTabHistoryUsed < 0 should NEVER happen but just to be safe
+  if FUndoCloseTabHistoryUsed <= 0 then
+    Exit;
+
+  //pop element from history and open a tab with it
+  FUndoCloseTabHistoryUsed := FUndoCloseTabHistoryUsed - 1;
+  MainTabs.Tabs.Append(FUndoCloseTabHistory[FUndoCloseTabHistoryUsed]);
+  MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
+
+  //deselect and move cursor to end of string
+  if AwesomeBar.Focused then
+  begin
+    AwesomeBar.SelLength := 0;
+    AwesomeBar.SelStart := Length(AwesomeBar.Text);
+  end;
+end;
+
 function PrettyPrintMilliSeconds(totalms: int64): string;
 var
   s, ms: integer;
@@ -551,6 +579,14 @@ begin
   end; //if
 
   //only close if unmodified or cancel wasn't picked above
+
+  //add to history first if we have space
+  if FUndoCloseTabHistoryUsed < UndoCloseTabHistoryMaxSize then
+  begin
+    FUndoCloseTabHistory[FUndoCloseTabHistoryUsed] := MainTabs.Tabs[MainTabs.TabIndex];
+    FUndoCloseTabHistoryUsed := FUndoCloseTabHistoryUsed + 1;
+  end;
+
   MainTabs.Tabs.Delete(MainTabs.TabIndex);
   if MainTabs.Tabs.Count = 0 then
   begin

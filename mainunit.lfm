@@ -653,6 +653,11 @@ object Form1: TForm1
       OnExecute = BeginFindActionExecute
       ShortCut = 16454
     end
+    object UndoCloseTabAction: TAction
+      Caption = 'UndoCloseTabAction'
+      OnExecute = UndoCloseTabActionExecute
+      ShortCut = 24660
+    end
   end
   object DeselectSuggestionsTimer: TTimer
     Enabled = False
