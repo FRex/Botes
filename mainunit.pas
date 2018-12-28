@@ -101,7 +101,7 @@ const
   TagCountPanel = 1;
   QueryTimePanel = 2;
   OldSizePanel = 3;
-  NotesPathPanel = 4;
+  NotesPathSizePanel = 4;
 
 { TForm1 }
 
@@ -138,6 +138,9 @@ end;
 
 function PrettyPrintFileSize(size: int64): string;
 begin
+  if size < 0 then
+    Exit('Error');
+
   if size < intpower(1024.0, 1) then
     Exit(IntToStr(size) + ' Bytes');
 
@@ -182,6 +185,7 @@ var
   matchmarkup: TSynEditMarkupHighlightAll;
   i: integer;
   allnotespath: string;
+  notespanelstr: string;
 begin
   FAllLines := TStringList.Create;
   FAllLines.LineBreak := #10;
@@ -197,7 +201,8 @@ begin
   try
     allnotespath := GetFileNearExe('allnotes.txt');
     FAllLines.LoadFromFile(allnotespath);
-    StatusBar.Panels[NotesPathPanel].Text := allnotespath;
+    notespanelstr := allnotespath + ' - ' + PrettyPrintFileSize(FileSize(allnotespath));
+    StatusBar.Panels[NotesPathSizePanel].Text := notespanelstr;
   except
     on EFOpenError do
       MessageDlg('File not found', Format('Failed to open file: %s', [allnotespath]),
@@ -730,6 +735,9 @@ begin
 end;
 
 function TForm1.SaveNotes: boolean;
+var
+  allnotespath: string;
+  notespanelstr: string;
 begin
   //fix for below check - since 'no lines' = 'one empty line' kinda
   if (TextEditor.Lines.Count = 1) and (TextEditor.Lines[0] = '') then
@@ -747,11 +755,14 @@ begin
       Exit(False);
     end;
 
+  allnotespath := GetFileNearExe('allnotes.txt');
   FAllLines.Assign(FDiscardedLines);
   FAllLines.AddStrings(TextEditor.Lines);
-  FAllLines.SaveToFile(GetFileNearExe('allnotes.txt'));
+  FAllLines.SaveToFile(allnotespath);
   SaveToOld(FAllLines);
   StatusBar.Panels[OldSizePanel].Text := GetOldDirSize;
+  notespanelstr := allnotespath + ' - ' + PrettyPrintFileSize(FileSize(allnotespath));
+  StatusBar.Panels[NotesPathSizePanel].Text := notespanelstr;
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
