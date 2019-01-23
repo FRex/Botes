@@ -16,10 +16,10 @@ The total size of all files in `old` directory is also displayed on the status b
 
 
 # Demo
-Here is a self contained zip with all you need to try botes out on 64 bit Windows: [link](https://ln.sync.com/dl/23c5f7410/grkq6yfi-fzcuxrra-v4juvnf6-gv9gt7z2).
-For reference the filename contains the commit hash from which it was built.
-If it's out of date and you want a fresh one but don't want to bother with installing
-Lazarus yourself then drop me an email or open an issue and I'll build it.
+In [releases](https://github.com/FRex/botes/releases) of this repo you will find the
+self-contained zips for 64 bit Windows that contain everything you need to get started.
+Releases are tagged using [Calendar Versioning](http://calver.org/) scheme `vYY.0M.0D`.
+For Linux you will need to compile Botes yourself.
 
 
 # Screens
