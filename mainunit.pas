@@ -509,11 +509,10 @@ procedure TForm1.UniqueInstance1OtherInstance(Sender: TObject;
 begin
 
   if ParamCount > 0 then
-  begin
     OpenShortcutFile(Parameters[0]);
-    Application.Restore;
-    Application.BringToFront;
-  end;
+
+  Application.Restore;
+  Application.BringToFront;
 end;
 
 procedure TForm1.OpenShortcutFile(const fname: string);
