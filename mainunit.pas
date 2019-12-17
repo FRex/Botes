@@ -5,10 +5,8 @@ unit mainunit;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, SynEdit, SynHighlighterAny, Forms, Controls,
-  Graphics, Dialogs, StdCtrls, Menus, ExtCtrls, ComCtrls, ActnList,
-  SynEditMarkupHighAll, SynEditMiscClasses, SynEditMarkupSpecialLine, StrUtils,
-  dateutils, LCLType, Math, LCLIntf;
+  Classes, SynEdit, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Menus, ExtCtrls, ComCtrls, ActnList, SynEditMiscClasses;
 
 const
   UndoCloseTabHistoryMaxSize = 100;
@@ -95,6 +93,10 @@ var
 implementation
 
 {$R *.lfm}
+
+uses
+  StrUtils, dateutils, LCLType, Math, LCLIntf, SynEditMarkupHighAll, SysUtils,
+  SynHighlighterAny, FileUtil;
 
 const
   LineCountPanel = 0;

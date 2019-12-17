@@ -12,7 +12,7 @@ object Form1: TForm1
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '1.8.4.0'
+  LCLVersion = '2.0.6.0'
   object MainTabs: TTabControl
     Left = 0
     Height = 633
@@ -66,7 +66,7 @@ object Form1: TForm1
       OnEnter = TextEditorEnter
       OnExit = TextEditorExit
       OnKeyPress = TextEditorKeyPress
-      Gutter.Width = 61
+      Gutter.Width = 72
       Gutter.MouseActions = <>
       RightGutter.Width = 0
       RightGutter.MouseActions = <>
@@ -507,7 +507,7 @@ object Form1: TForm1
       OnSpecialLineMarkup = TextEditorSpecialLineMarkup
       inline SynLeftGutterPartList1: TSynGutterPartList
         object SynGutterMarks1: TSynGutterMarks
-          Width = 24
+          Width = 30
           MouseActions = <>
         end
         object SynGutterLineNumber1: TSynGutterLineNumber
@@ -521,18 +521,19 @@ object Form1: TForm1
           LeadingZeros = False
         end
         object SynGutterChanges1: TSynGutterChanges
-          Width = 4
+          Width = 5
           MouseActions = <>
           ModifiedColor = 59900
           SavedColor = clGreen
         end
         object SynGutterSeparator1: TSynGutterSeparator
-          Width = 2
+          Width = 3
           MouseActions = <>
           MarkupInfo.Background = clWhite
           MarkupInfo.Foreground = clGray
         end
         object SynGutterCodeFolding1: TSynGutterCodeFolding
+          Width = 13
           MouseActions = <>
           MarkupInfo.Background = clNone
           MarkupInfo.Foreground = clGray
