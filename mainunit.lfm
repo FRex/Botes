@@ -667,4 +667,10 @@ object Form1: TForm1
     left = 32
     top = 77
   end
+  object UniqueInstance1: TUniqueInstance
+    Enabled = True
+    OnOtherInstance = UniqueInstance1OtherInstance
+    left = 277
+    top = 93
+  end
 end

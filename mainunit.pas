@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SynEdit, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Menus, ExtCtrls, ComCtrls, ActnList, SynEditMiscClasses;
+  Menus, ExtCtrls, ComCtrls, ActnList, UniqueInstance, SynEditMiscClasses;
 
 const
   UndoCloseTabHistoryMaxSize = 100;
@@ -36,6 +36,7 @@ type
     TextQuery: TEdit;
     TextEditor: TSynEdit;
     DeselectSuggestionsTimer: TTimer;
+    UniqueInstance1: TUniqueInstance;
     procedure AwesomeBarChange(Sender: TObject);
     procedure AwesomeBarEnter(Sender: TObject);
     procedure AwesomeBarKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
@@ -68,6 +69,9 @@ type
     procedure TextQueryExit(Sender: TObject);
     procedure TextQueryKeyPress(Sender: TObject; var Key: char);
     procedure UndoCloseTabActionExecute(Sender: TObject);
+    procedure UniqueInstance1OtherInstance(Sender: TObject;
+      ParamCount: integer; const Parameters: array of string);
+    procedure OpenShortcutFile(const fname: string);
   private
     FAllLines, FDiscardedLines, FAllTags: TStringList;
     FFoundTextPoints: array of TPoint; //xy of caret for each found text
@@ -207,8 +211,6 @@ var
   i: integer;
   allnotespath: string;
   notespanelstr: string;
-  shortcutquery: string;
-  shortcutqueryopen: boolean;
 begin
   FAllLines := TStringList.Create;
   FAllLines.LineBreak := #10;
@@ -259,31 +261,10 @@ begin
       end;
 
     if ParamCount > 0 then
-    begin
-      //TODO: catch the FFOpenError this throws and display error message box, maybe
-      shortcutquery := LoadQueryFromShortcutFile(ParamStr(1));
-      shortcutqueryopen := False;
-      if shortcutquery <> '' then
-      begin
-        for i := 0 to MainTabs.Tabs.Count - 1 do
-        begin
-          if MainTabs.Tabs[i] = shortcutquery then
-          begin
-            MainTabs.TabIndex := i;
-            shortcutqueryopen := True;
-          end;
-        end; //for
-
-        if not shortcutqueryopen then
-        begin
-          MainTabs.Tabs.Append(shortcutquery);
-          MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
-        end;
-      end; //if shortcutquery <> '' then
-    end; //if ParamCount > 0 then
+      OpenShortcutFile(ParamStr(1));
   except
     //ignore EFOpenError - we start with one empty tab set in designer so its ok
-    on E: EFOpenError do ;
+    on EFOpenError do ;
   end;
 
   //set first tab awesome bar
@@ -520,6 +501,51 @@ begin
   begin
     AwesomeBar.SelLength := 0;
     AwesomeBar.SelStart := Length(AwesomeBar.Text);
+  end;
+end;
+
+procedure TForm1.UniqueInstance1OtherInstance(Sender: TObject;
+  ParamCount: integer; const Parameters: array of string);
+begin
+
+  if ParamCount > 0 then
+  begin
+    OpenShortcutFile(Parameters[0]);
+    Application.Restore;
+    Application.BringToFront;
+  end;
+end;
+
+procedure TForm1.OpenShortcutFile(const fname: string);
+var
+  i: integer;
+  shortcutquery: string;
+  shortcutqueryopen: boolean;
+begin
+  try
+    shortcutquery := LoadQueryFromShortcutFile(fname);
+    shortcutqueryopen := False;
+    if shortcutquery <> '' then
+    begin
+      for i := 0 to MainTabs.Tabs.Count - 1 do
+      begin
+        if MainTabs.Tabs[i] = shortcutquery then
+        begin
+          MainTabs.TabIndex := i;
+          shortcutqueryopen := True;
+        end;
+      end; //for
+
+      if not shortcutqueryopen then
+      begin
+        MainTabs.Tabs.Append(shortcutquery);
+        MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
+      end;
+    end; //if shortcutquery <> '' then
+  except
+    on EFOpenError do
+      MessageDlg('File not found', Format('Failed to open shortcut file: %s', [fname]),
+        mtError, [mbOK], 0);
   end;
 end;
 
@@ -780,6 +806,7 @@ begin
   DateTimeToString(timestamp, 'yyyy-mm-dd-hh-nn', Now);
   fname := 'allnotes-' + timestamp + '.txt';
   list.SaveToFile(dname + DirectorySeparator + fname);
+
 end;
 
 function TForm1.SaveNotes: boolean;
