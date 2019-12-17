@@ -15989,7 +15989,19 @@ Double click on status bar to open the directory Botes is in.
 
 Create old directory there to get a duplicate of every saved file.
 See the included README.md for more details about this feature.
-Check https://github.com/FRex/Botes for the latest version.
+
+Create a file with a single line (case sensitive) in the form of 'Query YOURTAG'
+and pass it as first and only argument when starting Botes to create a shortcut
+to open/select a tab with 'YOURTAG' in it. You can further use a unique extension
+(for example .bs, Botes shortcut) and associate it with Botes to create a file
+that when opened with default app from explorer or command line will open Botes.
+
+There can only be one instance of Botes running, if you attempt to open another
+it will instead focus the already opened one. This feature works properly with
+the above shortcut file feature as well (it'll open or focus a tab specified in
+the file you attempted to open in the already existing instance).
+
+Check https://github.com/FRex/Botes for the latest version and more information.
 
 When the suggestions list box is visible pressing down will go into it
 and pressing up when having first item selected in it or escape at
