@@ -131,6 +131,25 @@ begin
   Result := IsTagLine(line) and (line + ' ').Contains('#' + tag + ' ');
 end;
 
+function LoadQueryFromShortcutFile(const fpath: string): string;
+const
+  prefix = 'Query ';
+var
+  Lines: TStringList;
+  line: string;
+begin
+  try
+    Lines := TStringList.Create;
+    Lines.LoadFromFile(fpath);
+    for line in Lines do
+      if line.StartsWith(prefix) then
+        Exit(line.Substring(Length(prefix)));
+  finally
+    Lines.Free;
+  end;
+  Result := '';
+end;
+
 function GetFileNearExe(const fname: string): string;
 begin
   Result := ExtractFilePath(Application.ExeName) + fname;
@@ -186,6 +205,8 @@ var
   i: integer;
   allnotespath: string;
   notespanelstr: string;
+  shortcutquery: string;
+  shortcutqueryopen: boolean;
 begin
   FAllLines := TStringList.Create;
   FAllLines.LineBreak := #10;
@@ -234,8 +255,33 @@ begin
         MainTabs.Tabs[i] := Copy(MainTabs.Tabs[i], 2, length(MainTabs.Tabs[i]));
         MainTabs.TabIndex := i;
       end;
+
+    if ParamCount > 0 then
+    begin
+      //TODO: catch the FFOpenError this throws and display error message box, maybe
+      shortcutquery := LoadQueryFromShortcutFile(ParamStr(1));
+      shortcutqueryopen := False;
+      if shortcutquery <> '' then
+      begin
+        for i := 0 to MainTabs.Tabs.Count - 1 do
+        begin
+          if MainTabs.Tabs[i] = shortcutquery then
+          begin
+            MainTabs.TabIndex := i;
+            shortcutqueryopen := True;
+          end;
+        end; //for
+
+        if not shortcutqueryopen then
+        begin
+          MainTabs.Tabs.Append(shortcutquery);
+          MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
+        end;
+      end; //if shortcutquery <> '' then
+    end; //if ParamCount > 0 then
   except
     //ignore EFOpenError - we start with one empty tab set in designer so its ok
+    on E: EFOpenError do ;
   end;
 
   //set first tab awesome bar
