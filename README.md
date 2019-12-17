@@ -26,7 +26,7 @@ For Linux (and others) you will need to compile Botes yourself (let me know if y
 A plaintext file with a single line in it of the form `Query QUERYTEXT` (case sensitive) is
 a `Botes` shortcut file that when passed as first argument to a `Botes` invocation will open
 a new tab with text `QUERYTEXT` (or select if it's already open). Lines not starting with `Query`
-are ignored (but in future they might have an additional effect), lines starting with `Query`
+are ignored (but in the future there might be more kinds lines to use), lines starting with `Query`
 after first such line are ignored as well. I use extension `.bs` (`Botes` shortcut) for them
 and associate them with `Botes` so that (double) clicking them in the file manager or opening
 them in default program from the command line will cause them to be conveniently opened by `Botes`.
@@ -36,7 +36,7 @@ them in default program from the command line will cause them to be conveniently
 Using the component described and provided at at
 [FreePascalWiki/UniqueInstance](https://wiki.freepascal.org/UniqueInstance) `Botes`
 is limited to a single instance, attempting to open another instance will attempt to
-focus and bring up the already existing one (WM settings mightt affect how that goes).
+focus and bring up the already existing one (WM settings might affect how that goes).
 If a shortcut file was being opened by this second instance, it will instead be opened by
 the first instance properly (just how programs like VLC, Notepad++ and VS Code do it).
 
