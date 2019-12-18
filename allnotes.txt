@@ -15982,6 +15982,7 @@ Ctrl + N - open a new tab.
 Ctrl + T - open a new tab.
 Ctrl + Shift + T - undo closing last tab.
 Ctrl + W - close current tab.
+Ctrl + D - (for TODO lists), toggle between [ ] and [x] if current line starts with either.
 
 Ctrl + F when in main text area will open a simple search
 

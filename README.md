@@ -54,7 +54,8 @@ the first instance properly (just how programs like VLC, Notepad++ and VS Code d
 * Esc - move focus between the text area and the serach bar.
 * Ctrl + Page Up/Down - switch between the open tabs.
 * Ctrl + Shift + Page Up/Down - move the currently open tab left/right.
-* Ctlr + F - use find (beware - it's quite crude).
+* Ctrl + F - use find (beware - it's quite crude).
+* Ctrl + D - toggle between `[ ]` and `[x]` at the start of the line (for TODO lists).
 * Double click on status bar - open directory `Botes` is in.
 
 
