@@ -474,6 +474,10 @@ object Form1: TForm1
         item
           Command = ecBlockUnindent
           ShortCut = 16603
+        end      
+        item
+          Command = ecUserDefined0
+          ShortCut = 16452
         end>
       MouseActions = <>
       MouseTextActions = <>
@@ -504,6 +508,7 @@ object Form1: TForm1
       LineHighlightColor.Background = clSkyBlue
       LineHighlightColor.Foreground = clNone
       TabWidth = 4
+      OnCommandProcessed = TextEditorCommandProcessed
       OnSpecialLineMarkup = TextEditorSpecialLineMarkup
       inline SynLeftGutterPartList1: TSynGutterPartList
         object SynGutterMarks1: TSynGutterMarks

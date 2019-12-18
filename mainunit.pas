@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SynEdit, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  Menus, ExtCtrls, ComCtrls, ActnList, UniqueInstance, SynEditMiscClasses;
+  Menus, ExtCtrls, ComCtrls, ActnList, UniqueInstance, SynEditMiscClasses,
+  SynEditKeyCmds, LCLType;
 
 const
   UndoCloseTabHistoryMaxSize = 100;
@@ -59,6 +60,8 @@ type
     procedure StatusBarDblClick(Sender: TObject);
     procedure SuggestionsKeyDown(Sender: TObject; var Key: word;
       Shift: TShiftState);
+    procedure TextEditorCommandProcessed(Sender: TObject;
+      var Command: TSynEditorCommand; var AChar: TUTF8Char; Data: pointer);
     procedure TextEditorEnter(Sender: TObject);
     procedure TextEditorExit(Sender: TObject);
     procedure TextEditorKeyPress(Sender: TObject; var Key: char);
@@ -99,7 +102,7 @@ implementation
 {$R *.lfm}
 
 uses
-  StrUtils, dateutils, LCLType, Math, LCLIntf, SynEditMarkupHighAll, SysUtils,
+  StrUtils, dateutils, Math, LCLIntf, SynEditMarkupHighAll, SysUtils,
   SynHighlighterAny, FileUtil;
 
 const
@@ -398,6 +401,26 @@ begin
     AwesomeBar.SelStart := Length(AwesomeBar.Text);
     AwesomeBar.SelLength := 0;
     DeselectSuggestionsTimer.Enabled := True;
+  end;
+end;
+
+procedure TForm1.TextEditorCommandProcessed(Sender: TObject;
+  var Command: TSynEditorCommand; var AChar: TUTF8Char; Data: pointer);
+var
+  y: integer;
+  mark: string;
+  a, b: TPoint;
+begin
+  if Command = ecUserDefinedFirst then
+  begin
+    a.Create(1, TextEditor.CaretY);
+    b.Create(4, TextEditor.CaretY);
+    mark := TextEditor.TextBetweenPoints[a, b];
+    if mark = '[ ]' then
+      TextEditor.TextBetweenPoints[a, b] := '[x]';
+
+    if mark = '[x]' then
+      TextEditor.TextBetweenPoints[a, b] := '[ ]';
   end;
 end;
 
