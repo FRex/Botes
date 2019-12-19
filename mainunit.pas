@@ -407,7 +407,6 @@ end;
 procedure TForm1.TextEditorCommandProcessed(Sender: TObject;
   var Command: TSynEditorCommand; var AChar: TUTF8Char; Data: pointer);
 var
-  y: integer;
   mark: string;
   a, b: TPoint;
 begin
@@ -415,7 +414,11 @@ begin
   begin
     a.Create(1, TextEditor.CaretY);
     b.Create(4, TextEditor.CaretY);
+
+    //save original text to not keep querying it and set the [x]/[ ] etc. more than once
     mark := TextEditor.TextBetweenPoints[a, b];
+
+    //use TextBetweenPoints so this change is in editing history and can be ctrl-z'd
     if mark = '[ ]' then
       TextEditor.TextBetweenPoints[a, b] := '[x]';
 
