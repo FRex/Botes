@@ -103,7 +103,7 @@ implementation
 
 uses
   StrUtils, dateutils, Math, LCLIntf, SynEditMarkupHighAll, SysUtils,
-  SynHighlighterAny, FileUtil;
+  SynHighlighterAny, FileUtil, SynGutterLineNumber;
 
 const
   LineCountPanel = 0;
@@ -231,6 +231,10 @@ begin
     FAllLines.LoadFromFile(allnotespath);
     notespanelstr := allnotespath + ' - ' + PrettyPrintFileSize(FileSize(allnotespath));
     StatusBar.Panels[NotesPathSizePanel].Text := notespanelstr;
+    if TextEditor.Gutter.Parts.Part[1] is TSynGutterLineNumber then
+      (TextEditor.Gutter.Parts.Part[1] as TSynGutterLineNumber).DigitCount :=
+        Length(IntToStr(FAllLines.Count));
+
   except
     on EFOpenError do
       MessageDlg('File not found', Format('Failed to open file: %s', [allnotespath]),
