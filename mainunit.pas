@@ -44,11 +44,11 @@ type
     procedure BeginFindActionExecute(Sender: TObject);
     procedure CloseTabActionExecute(Sender: TObject);
     procedure DeselectSuggestionsTimerTimer(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MainTabsChange(Sender: TObject);
     procedure MainTabsChanging(Sender: TObject; var AllowChange: boolean);
     procedure MoveTabBackwardActionExecute(Sender: TObject);
@@ -215,6 +215,8 @@ var
   allnotespath: string;
   notespanelstr: string;
 begin
+  WindowState := wsMaximized;
+
   FAllLines := TStringList.Create;
   FAllLines.LineBreak := #10;
   FDiscardedLines := TStringList.Create;
@@ -283,6 +285,15 @@ begin
   FAllLines.Free;
   FDiscardedLines.Free;
   FAllTags.Free;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+  //set focus to text if there is a tag query or to awesome bar if there isnt
+  if Length(MainTabs.Tabs[MainTabs.TabIndex]) = 0 then
+    AwesomeBar.SetFocus
+  else
+    TextEditor.SetFocus;
 end;
 
 procedure TForm1.MainTabsChange(Sender: TObject);
@@ -703,17 +714,6 @@ procedure TForm1.DeselectSuggestionsTimerTimer(Sender: TObject);
 begin
   Suggestions.ItemIndex := -1;
   DeselectSuggestionsTimer.Enabled := False;
-end;
-
-procedure TForm1.FormActivate(Sender: TObject);
-begin
-  WindowState := wsMaximized;
-
-  //set focus to text if there is a tag query or to awesome bar if there isnt
-  if Length(MainTabs.Tabs[MainTabs.TabIndex]) = 0 then
-    AwesomeBar.SetFocus
-  else
-    TextEditor.SetFocus;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
