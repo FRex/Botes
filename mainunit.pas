@@ -76,7 +76,7 @@ type
       ParamCount: integer; const Parameters: array of string);
     procedure OpenShortcutFile(const fname: string);
   private
-    FAllLines, FDiscardedLines, FAllTags, FTabLineNumbers: TStringList;
+    FAllLines, FDiscardedLines, FAllTags, FTabCaretsAndViews: TStringList;
     FFoundTextPoints: array of TPoint; //xy of caret for each found text
     FAllTagCount, FSelectedTagCount: integer;
     FUndoCloseTabHistory: array [0..UndoCloseTabHistoryMaxSize] of string;
@@ -89,6 +89,8 @@ type
     function QueryUnsavedChanges: TModalResult;
     procedure RefreshFoundPoints;
     procedure MoveCursorToNextFind;
+    procedure SaveCaretAndView(tabindex: integer);
+    procedure LoadCaretAndView(tabindex: integer);
     { private declarations }
   public
     { public declarations }
@@ -223,8 +225,8 @@ begin
   FDiscardedLines.LineBreak := #10;
   FAllTags := TStringList.Create;
   FAllLines.LineBreak := #10;
-  FTabLineNumbers := TStringList.Create;
-  FTabLineNumbers.LineBreak := #10;
+  FTabCaretsAndViews := TStringList.Create;
+  FTabCaretsAndViews.LineBreak := #10;
   MainTabs.Tabs.LineBreak := #10;
   MainTabs.Options := MainTabs.Options + [nboDoChangeOnSetIndex];
   StatusBar.Panels[OldSizePanel].Text := GetOldDirSize;
@@ -263,27 +265,18 @@ begin
   matchmarkup.Enabled := False;
 
   try
-    FTabLineNumbers.LoadFromFile(GetFileNearExe('tablinenumbers.txt'));
+    FTabCaretsAndViews.LoadFromFile(GetFileNearExe('tabcaretsandviews.txt'));
   except
     //ignore this error, since this is a file added in later version of the program
     on EFOpenError do ;
   end;
 
-  //replace all strings that are not valid ints with '1' to not worry about exceptions elsewhere
-  for i := 0 to FTabLineNumbers.Count - 1 do
-    try
-      StrToInt(FTabLineNumbers[i]);
-    except
-      on EConvertError do
-        FTabLineNumbers[i] := '1';
-    end;
-
   try
     MainTabs.Tabs.LoadFromFile(GetFileNearExe('tabs.txt'));
 
-    //first make sure we have '1' for each tab, if there were more tabs than line numbers
-    while FTabLineNumbers.Count < MainTabs.Tabs.Count do
-      FTabLineNumbers.Add('1');
+    //first make sure we have entry for each tab, if there were more tabs than line numbers
+    while FTabCaretsAndViews.Count < MainTabs.Tabs.Count do
+      FTabCaretsAndViews.Add('');
 
     for i := 0 to MainTabs.Tabs.Count - 1 do
       if (length(MainTabs.Tabs[i]) > 0) and (MainTabs.Tabs[i][1] = '@') then
@@ -308,7 +301,7 @@ begin
   FAllLines.Free;
   FDiscardedLines.Free;
   FAllTags.Free;
-  FTabLineNumbers.Free;
+  FTabCaretsAndViews.Free;
 end;
 
 procedure TForm1.FormShow(Sender: TObject);
@@ -323,7 +316,7 @@ end;
 procedure TForm1.MainTabsChange(Sender: TObject);
 begin
   AwesomeBar.Text := MainTabs.Tabs[MainTabs.TabIndex];
-  TextEditor.CaretY := StrToInt(FTabLineNumbers[MainTabs.TabIndex]);
+  LoadCaretAndView(MainTabs.TabIndex);
 end;
 
 procedure TForm1.MainTabsChanging(Sender: TObject; var AllowChange: boolean);
@@ -353,7 +346,7 @@ begin
     Exit;
 
   MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex - 1);
-  FTabLineNumbers.Exchange(MainTabs.TabIndex, MainTabs.TabIndex - 1);
+  FTabCaretsAndViews.Exchange(MainTabs.TabIndex, MainTabs.TabIndex - 1);
   onchanging := MainTabs.OnChanging;
   MainTabs.OnChanging := nil;
   MainTabs.TabIndex := MainTabs.TabIndex - 1;
@@ -368,7 +361,7 @@ begin
     Exit;
 
   MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex + 1);
-  FTabLineNumbers.Exchange(MainTabs.TabIndex, MainTabs.TabIndex + 1);
+  FTabCaretsAndViews.Exchange(MainTabs.TabIndex, MainTabs.TabIndex + 1);
   onchanging := MainTabs.OnChanging;
   MainTabs.OnChanging := nil;
   MainTabs.TabIndex := MainTabs.TabIndex + 1;
@@ -377,9 +370,9 @@ end;
 
 procedure TForm1.NewTabActionExecute(Sender: TObject);
 begin
-  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
+  SaveCaretAndView(MainTabs.TabIndex);
   MainTabs.Tabs.Append('');
-  FTabLineNumbers.Append('1');
+  FTabCaretsAndViews.Append('');
   MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
   AwesomeBar.SetFocus;
 end;
@@ -392,9 +385,9 @@ begin
   if tab = MainTabs.Tabs.Count then
     tab := 0;
 
-  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
+  SaveCaretAndView(MainTabs.TabIndex);
   MainTabs.TabIndex := tab;
-  TextEditor.CaretY := StrToInt(FTabLineNumbers[tab]);
+  LoadCaretAndView(tab);
 end;
 
 procedure TForm1.PrevTabActionExecute(Sender: TObject);
@@ -405,9 +398,9 @@ begin
   if tab = 0 then
     tab := MainTabs.Tabs.Count;
 
-  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
+  SaveCaretAndView(MainTabs.TabIndex);
   MainTabs.TabIndex := tab - 1;
-  TextEditor.CaretY := StrToInt(FTabLineNumbers[tab - 1]);
+  LoadCaretAndView(tab - 1);
 end;
 
 procedure TForm1.SaveNotesActionExecute(Sender: TObject);
@@ -758,8 +751,8 @@ begin
   strs[MainTabs.TabIndex] := '@' + strs[MainTabs.TabIndex];
   strs.SaveToFile(GetFileNearExe('tabs.txt'));
   strs.Free;
-  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
-  FTabLineNumbers.SaveToFile(GetFileNearExe('tablinenumbers.txt'));
+  SaveCaretAndView(MainTabs.TabIndex);
+  FTabCaretsAndViews.SaveToFile(GetFileNearExe('tabcaretsandviews.txt'));
 end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -905,8 +898,8 @@ begin
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
-  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
-  FTabLineNumbers.SaveToFile(GetFileNearExe('tablinenumbers.txt'));
+  SaveCaretAndView(MainTabs.TabIndex);
+  FTabCaretsAndViews.SaveToFile(GetFileNearExe('tabcaretsandviews.txt'));
   Exit(True);
 end;
 
@@ -967,6 +960,54 @@ begin
   end
   else
     TextQueryStatusLabel.Caption := 'No Results';
+end;
+
+procedure TForm1.SaveCaretAndView(tabindex: integer);
+var
+  parts: TStringList;
+begin
+  try
+    parts := TStringList.Create;
+    parts.Delimiter := ' ';
+    parts.Append(IntToStr(TextEditor.CaretY));
+    parts.Append(IntToStr(TextEditor.CaretX));
+    parts.Append(IntToStr(TextEditor.TopLine));
+    parts.Append(IntToStr(TextEditor.LeftChar));
+    FTabCaretsAndViews[tabindex] := parts.DelimitedText;
+  finally
+    parts.Free;
+  end;
+end;
+
+procedure TForm1.LoadCaretAndView(tabindex: integer);
+var
+  parts: TStringList;
+  y, x, t, l: integer;
+begin
+  try
+    parts := TStringList.Create;
+    try
+      parts.Delimiter := ' ';
+      parts.DelimitedText := FTabCaretsAndViews[tabindex];
+      if parts.Count <> 4 then
+        Exit;
+
+      //parse to vars to not partly set in case later int doesnt parse
+      y := StrToInt(parts[0]);
+      x := StrToInt(parts[1]);
+      t := StrToInt(parts[2]);
+      l := StrToInt(parts[3]);
+
+      TextEditor.CaretY := y;
+      TextEditor.CaretX := x;
+      TextEditor.TopLine := t;
+      TextEditor.LeftChar := l;
+    except
+      on EConvertError do ;
+    end;
+  finally
+    parts.Free;
+  end;
 end;
 
 end.
