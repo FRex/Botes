@@ -76,7 +76,7 @@ type
       ParamCount: integer; const Parameters: array of string);
     procedure OpenShortcutFile(const fname: string);
   private
-    FAllLines, FDiscardedLines, FAllTags: TStringList;
+    FAllLines, FDiscardedLines, FAllTags, FTabLineNumbers: TStringList;
     FFoundTextPoints: array of TPoint; //xy of caret for each found text
     FAllTagCount, FSelectedTagCount: integer;
     FUndoCloseTabHistory: array [0..UndoCloseTabHistoryMaxSize] of string;
@@ -223,6 +223,8 @@ begin
   FDiscardedLines.LineBreak := #10;
   FAllTags := TStringList.Create;
   FAllLines.LineBreak := #10;
+  FTabLineNumbers := TStringList.Create;
+  FTabLineNumbers.LineBreak := #10;
   MainTabs.Tabs.LineBreak := #10;
   MainTabs.Options := MainTabs.Options + [nboDoChangeOnSetIndex];
   StatusBar.Panels[OldSizePanel].Text := GetOldDirSize;
@@ -261,7 +263,28 @@ begin
   matchmarkup.Enabled := False;
 
   try
+    FTabLineNumbers.LoadFromFile(GetFileNearExe('tablinenumbers.txt'));
+  except
+    //ignore this error, since this is a file added in later version of the program
+    on EFOpenError do ;
+  end;
+
+  //replace all strings that are not valid ints with '1' to not worry about exceptions elsewhere
+  for i := 0 to FTabLineNumbers.Count - 1 do
+    try
+      StrToInt(FTabLineNumbers[i]);
+    except
+      on EConvertError do
+        FTabLineNumbers[i] := '1';
+    end;
+
+  try
     MainTabs.Tabs.LoadFromFile(GetFileNearExe('tabs.txt'));
+
+    //first make sure we have '1' for each tab, if there were more tabs than line numbers
+    while FTabLineNumbers.Count < MainTabs.Tabs.Count do
+      FTabLineNumbers.Add('1');
+
     for i := 0 to MainTabs.Tabs.Count - 1 do
       if (length(MainTabs.Tabs[i]) > 0) and (MainTabs.Tabs[i][1] = '@') then
       begin
@@ -285,6 +308,7 @@ begin
   FAllLines.Free;
   FDiscardedLines.Free;
   FAllTags.Free;
+  FTabLineNumbers.Free;
 end;
 
 procedure TForm1.FormShow(Sender: TObject);
@@ -299,6 +323,7 @@ end;
 procedure TForm1.MainTabsChange(Sender: TObject);
 begin
   AwesomeBar.Text := MainTabs.Tabs[MainTabs.TabIndex];
+  TextEditor.CaretY := StrToInt(FTabLineNumbers[MainTabs.TabIndex]);
 end;
 
 procedure TForm1.MainTabsChanging(Sender: TObject; var AllowChange: boolean);
@@ -328,6 +353,7 @@ begin
     Exit;
 
   MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex - 1);
+  FTabLineNumbers.Exchange(MainTabs.TabIndex, MainTabs.TabIndex - 1);
   onchanging := MainTabs.OnChanging;
   MainTabs.OnChanging := nil;
   MainTabs.TabIndex := MainTabs.TabIndex - 1;
@@ -342,6 +368,7 @@ begin
     Exit;
 
   MainTabs.Tabs.Exchange(MainTabs.TabIndex, MainTabs.TabIndex + 1);
+  FTabLineNumbers.Exchange(MainTabs.TabIndex, MainTabs.TabIndex + 1);
   onchanging := MainTabs.OnChanging;
   MainTabs.OnChanging := nil;
   MainTabs.TabIndex := MainTabs.TabIndex + 1;
@@ -350,7 +377,9 @@ end;
 
 procedure TForm1.NewTabActionExecute(Sender: TObject);
 begin
+  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
   MainTabs.Tabs.Append('');
+  FTabLineNumbers.Append('1');
   MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
   AwesomeBar.SetFocus;
 end;
@@ -363,7 +392,9 @@ begin
   if tab = MainTabs.Tabs.Count then
     tab := 0;
 
+  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
   MainTabs.TabIndex := tab;
+  TextEditor.CaretY := StrToInt(FTabLineNumbers[tab]);
 end;
 
 procedure TForm1.PrevTabActionExecute(Sender: TObject);
@@ -374,7 +405,9 @@ begin
   if tab = 0 then
     tab := MainTabs.Tabs.Count;
 
+  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
   MainTabs.TabIndex := tab - 1;
+  TextEditor.CaretY := StrToInt(FTabLineNumbers[tab - 1]);
 end;
 
 procedure TForm1.SaveNotesActionExecute(Sender: TObject);
@@ -725,6 +758,8 @@ begin
   strs[MainTabs.TabIndex] := '@' + strs[MainTabs.TabIndex];
   strs.SaveToFile(GetFileNearExe('tabs.txt'));
   strs.Free;
+  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
+  FTabLineNumbers.SaveToFile(GetFileNearExe('tablinenumbers.txt'));
 end;
 
 procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -870,6 +905,8 @@ begin
   CollectAllTags;
   TextEditor.MarkTextAsSaved;
   TextEditor.Modified := False;
+  FTabLineNumbers[MainTabs.TabIndex] := IntToStr(TextEditor.CaretY);
+  FTabLineNumbers.SaveToFile(GetFileNearExe('tablinenumbers.txt'));
   Exit(True);
 end;
 
