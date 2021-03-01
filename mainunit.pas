@@ -74,6 +74,7 @@ type
     procedure UndoCloseTabActionExecute(Sender: TObject);
     procedure UniqueInstance1OtherInstance(Sender: TObject;
       ParamCount: integer; const Parameters: array of string);
+    procedure SelectOrAddTab(const query: string);
     procedure OpenShortcutFile(const fname: string);
   private
     FAllLines, FDiscardedLines, FAllTags, FTabCaretsAndViews: TStringList;
@@ -207,6 +208,23 @@ begin
 
   Result := 'Old: ' + IntToStr(list.Count) + ' files, ' + PrettyPrintFileSize(tsize);
   list.Free;
+end;
+
+function GetWordTouchingCursor(const line: string; idx: integer): string;
+var
+  tmp: string;
+  start, ending: integer;
+begin
+  tmp := ' ' + line + ' ';
+  start := idx + 1;
+  ending := idx + 1;
+  while tmp[start - 1] <> ' ' do
+    start := start - 1;
+
+  while tmp[ending] <> ' ' do
+    ending := ending + 1;
+
+  Result := Copy(tmp, start, ending - start);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
@@ -448,10 +466,10 @@ end;
 procedure TForm1.TextEditorCommandProcessed(Sender: TObject;
   var Command: TSynEditorCommand; var AChar: TUTF8Char; Data: pointer);
 var
-  mark: string;
+  mark, word, line, url: string;
   a, b: TPoint;
 begin
-  if Command = ecUserDefinedFirst then
+  if Command = (ecUserDefinedFirst + 0) then
   begin
     a.Create(1, TextEditor.CaretY);
     b.Create(4, TextEditor.CaretY);
@@ -466,6 +484,36 @@ begin
     if mark = '[x]' then
       TextEditor.TextBetweenPoints[a, b] := '[ ]';
   end;
+
+  if Command = (ecUserDefinedFirst + 1) then
+  begin
+    url := '';
+
+    //if anything is selected try to open it, otherwise open 'word' near cursor
+    if TextEditor.SelText <> '' then
+      url := TextEditor.SelText
+    else
+    begin
+      line := TextEditor.Lines[TextEditor.CaretY - 1];
+      if (Length(line) + 1) >= TextEditor.CaretX then
+      begin
+        word := GetWordTouchingCursor(line, TextEditor.CaretX);
+
+        //looking for substring :/ catches absolute Windows paths (with forward
+        //slashes) and URLs, looking for starting / catches absolute Linux paths
+        //starting with hashtag is to catch links to other notes within the app
+        if (Pos(':/', word) <> 0) or word.StartsWith('/') or word.StartsWith('#') then
+          url := word;
+      end;
+    end;
+
+    if url.StartsWith('#') then
+      SelectOrAddTab(Copy(url, 2, Length(url) + 100))
+    else if url <> '' then
+      OpenUrl(url);
+
+  end; //if command is user defined first + 1
+
 end;
 
 procedure TForm1.TextEditorEnter(Sender: TObject);
@@ -582,32 +630,35 @@ begin
   Application.BringToFront;
 end;
 
-procedure TForm1.OpenShortcutFile(const fname: string);
+procedure TForm1.SelectOrAddTab(const query: string);
 var
   i: integer;
+begin
+  if query = '' then
+    Exit;
+
+  //backwards to select rightmost tab if there are duplicates
+  for i := (MainTabs.Tabs.Count - 1) downto 0 do
+  begin
+    if MainTabs.Tabs[i] = query then
+    begin
+      MainTabs.TabIndex := i;
+      Exit;
+    end;
+  end; //for
+
+  //if above loop didn't find and select a tab we must add it
+  MainTabs.Tabs.Append(query);
+  MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
+end;
+
+procedure TForm1.OpenShortcutFile(const fname: string);
+var
   shortcutquery: string;
-  shortcutqueryopen: boolean;
 begin
   try
     shortcutquery := LoadQueryFromShortcutFile(fname);
-    shortcutqueryopen := False;
-    if shortcutquery <> '' then
-    begin
-      for i := 0 to MainTabs.Tabs.Count - 1 do
-      begin
-        if MainTabs.Tabs[i] = shortcutquery then
-        begin
-          MainTabs.TabIndex := i;
-          shortcutqueryopen := True;
-        end;
-      end; //for
-
-      if not shortcutqueryopen then
-      begin
-        MainTabs.Tabs.Append(shortcutquery);
-        MainTabs.TabIndex := MainTabs.Tabs.Count - 1;
-      end;
-    end; //if shortcutquery <> '' then
+    SelectOrAddTab(shortcutquery);
   except
     on EFOpenError do
       MessageDlg('File not found', Format('Failed to open shortcut file: %s', [fname]),
