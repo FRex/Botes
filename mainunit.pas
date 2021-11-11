@@ -785,6 +785,8 @@ begin
   end;
   FilterTextByAwesomeBar;
 
+  LoadCaretAndView(MainTabs.TabIndex);
+
 end;
 
 procedure TForm1.DeselectSuggestionsTimerTimer(Sender: TObject);
