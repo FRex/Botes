@@ -92,6 +92,7 @@ type
     procedure MoveCursorToNextFind;
     procedure SaveCaretAndView(tabindex: integer);
     procedure LoadCaretAndView(tabindex: integer);
+    procedure SortTodoListAroundCurrentLine;
     { private declarations }
   public
     { public declarations }
@@ -514,6 +515,62 @@ begin
 
   end; //if command is user defined first + 1
 
+  if Command = (ecUserDefinedFirst + 2) then
+    SortTodoListAroundCurrentLine;
+end;
+
+function IsTodoLine(line: string): boolean;
+begin
+  Exit((line.Substring(0, 3) = '[ ]') or (line.Substring(0, 3) = '[x]'));
+end;
+
+procedure TForm1.SortTodoListAroundCurrentLine;
+var
+  firstTodo, lastTodo, cur: integer;
+  completed, pending: TStringList;
+  line: string;
+begin
+  if not IsTodoLine(TextEditor.Lines[TextEditor.CaretY - 1]) then
+    Exit;
+
+  for cur := TextEditor.CaretY - 1 downto 0 do
+  begin
+    if not IsTodoLine(TextEditor.Lines[cur]) then
+      break;
+    firstTodo := cur;
+  end;
+
+  for cur := TextEditor.CaretY - 1 to TextEditor.Lines.Count - 1 do
+  begin
+    if not IsTodoLine(TextEditor.Lines[cur]) then
+      break;
+    lastTodo := cur;
+  end;
+
+  completed := TStringList.Create;
+  pending := TStringList.Create;
+
+  for cur := firstTodo to lastTodo do
+    if TextEditor.Lines[cur][2] = 'x' then
+      completed.Append(TextEditor.Lines[cur])
+    else
+      pending.Append(TextEditor.Lines[cur]);
+
+  TextEditor.BeginUpdate;
+  for cur := firstTodo to lastTodo do
+  begin
+    if (cur - firstTodo) < pending.Count then
+      line := pending[cur - firstTodo]
+    else
+      line := completed[cur - firstTodo - pending.Count];
+
+    TextEditor.TextBetweenPoints[TPoint.Create(0, cur + 1),
+      TPoint.Create(maxLongint, cur + 1)] := line;
+  end;
+  TextEditor.EndUpdate;
+
+  completed.Free;
+  pending.Free;
 end;
 
 procedure TForm1.TextEditorEnter(Sender: TObject);

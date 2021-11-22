@@ -15987,6 +15987,13 @@ Ctrl + O - open URL or hashtag that's selected or (if nothing's selected) under 
 
 Ctrl + F when in main text area will open a simple search
 
+Ctrl + K - sorts a TODO list (putting done at the end), try:
+[ ] item 1
+[x] item 2
+[x] item 3
+[ ] item 4
+[x] item 5
+
 Double click on status bar to open the directory Botes is in.
 
 Create old directory there to get a duplicate of every saved file.
