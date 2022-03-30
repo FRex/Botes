@@ -292,11 +292,6 @@ begin
 
   try
     MainTabs.Tabs.LoadFromFile(GetFileNearExe('tabs.txt'));
-
-    //first make sure we have entry for each tab, if there were more tabs than line numbers
-    while FTabCaretsAndViews.Count < MainTabs.Tabs.Count do
-      FTabCaretsAndViews.Add('');
-
     for i := 0 to MainTabs.Tabs.Count - 1 do
       if (length(MainTabs.Tabs[i]) > 0) and (MainTabs.Tabs[i][1] = '@') then
       begin
@@ -310,6 +305,10 @@ begin
     //ignore EFOpenError - we start with one empty tab set in designer so its ok
     on EFOpenError do ;
   end;
+
+  //make sure we have entry for each tab, if there were more tabs than line numbers
+  while FTabCaretsAndViews.Count < MainTabs.Tabs.Count do
+    FTabCaretsAndViews.Add('');
 
   //set first tab awesome bar
   MainTabsChange(MainTabs);
