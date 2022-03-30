@@ -253,6 +253,9 @@ begin
 
   try
     allnotespath := GetFileNearExe('allnotes.txt');
+    if not FileExists(allnotespath) then
+      allnotespath := GetFileNearExe('botes-initial-allnotes.txt');
+
     FAllLines.LoadFromFile(allnotespath);
     notespanelstr := allnotespath + ' - ' + PrettyPrintFileSize(FileSize(allnotespath));
     StatusBar.Panels[NotesPathSizePanel].Text := notespanelstr;

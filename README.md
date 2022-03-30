@@ -1,8 +1,14 @@
 # Botes
 `Botes` is a simple notes keeping application made with [Lazarus IDE](https://www.lazarus-ide.org/).
 Written mostly for personaly use, potentially unstable and buggy - create the `old` dir and/or
-backup your allnotes.txt if you use it!
+backup your `allnotes.txt` if you use it!
 
+
+# Initial Notes
+If file `allnotes.txt` is not present, then notes will be loaded from `botes-initial-allnotes.txt`.
+This is meant to allow shipping a zip file containing that file with initial notes and the exe that
+can then be unzipped for initial installation where initial notes will come from that file but can
+also be unpacked over existing botes directory without overwriting original `allnotes.txt` file.
 
 # Backup dir - old
 For backup/convenience if a directory named `old` is present near `botes.exe` then on each save in addition to
