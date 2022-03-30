@@ -63,7 +63,8 @@ the first instance properly (just how programs like VLC, Notepad++ and VS Code d
 * Ctrl + F - use find (beware - it's quite crude).
 * Ctrl + D - toggle between `[ ]` and `[x]` at the start of the line (for TODO lists).
 * Double click on status bar - open directory `Botes` is in.
-* Ctrl + O - open URL or hashtag that's selected or (if nothing's selected) under cursor
+* Ctrl + O - open URL or hashtag that's selected or (if nothing's selected) under cursor.
+* Ctrl + K - sorts a TODO list (putting done `[x]` items at the end).
 
 
 # Font
