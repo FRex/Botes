@@ -228,6 +228,94 @@ begin
   Result := Copy(tmp, start, ending - start);
 end;
 
+procedure EnsureNotesExist(const notefile: string);
+var
+  initialnotefile: string;
+  content: TStringList;
+begin
+  if FileExists(notefile) then
+    Exit;
+
+  initialnotefile := GetFileNearExe('botes-initial-allnotes.txt');
+  if FileExists(initialnotefile) then
+  begin
+    CopyFile(initialnotefile, notefile);
+  end;
+
+  content := TStringList.Create;
+  try
+    content.LineBreak := #10;
+
+    // below was auto generated
+    content.Add('#demo');
+    content.Add('Hello, controlls are:');
+    content.Add('Ctrl + S to save changes.');
+    content.Add(
+      'Esc - switch between this text area and the bar at the top that now says ''demo''.');
+    content.Add('Ctrl + Page Up/Down - move between tabs.');
+    content.Add('Ctrl + Shift + Page Up/Down - move the current tab around on the tab bar.');
+    content.Add('Ctrl + N - open a new tab.');
+    content.Add('Ctrl + T - open a new tab.');
+    content.Add('Ctrl + Shift + T - undo closing last tab.');
+    content.Add('Ctrl + W - close current tab.');
+    content.Add(
+      'Ctrl + D - (for TODO lists), toggle between [ ] and [x] if current line starts with either.');
+    content.Add(
+      'Ctrl + O - open URL or hashtag that''s selected or (if nothing''s selected) under cursor');
+    content.Add('');
+    content.Add('Ctrl + F when in main text area will open a simple search');
+    content.Add('');
+    content.Add('Ctrl + K - sorts a TODO list (putting done at the end), try:');
+    content.Add('[ ] item 1');
+    content.Add('[x] item 2');
+    content.Add('[x] item 3');
+    content.Add('[ ] item 4');
+    content.Add('[x] item 5');
+    content.Add('');
+    content.Add('Double click on status bar to open the directory Botes is in.');
+    content.Add('');
+    content.Add('Create old directory there to get a duplicate of every saved file.');
+    content.Add('See the included README.md for more details about this feature.');
+    content.Add('');
+    content.Add(
+      'Create a file with a single line (case sensitive) in the form of ''Query YOURTAG''');
+    content.Add(
+      'and pass it as first and only argument when starting Botes to create a shortcut');
+    content.Add(
+      'to open/select a tab with ''YOURTAG'' in it. You can further use a unique extension');
+    content.Add(
+      '(for example .bs, Botes shortcut) and associate it with Botes to create a file');
+    content.Add(
+      'that when opened with default app from explorer or command line will open Botes.');
+    content.Add('');
+    content.Add(
+      'There can only be one instance of Botes running, if you attempt to open another');
+    content.Add(
+      'it will instead focus the already opened one. This feature works properly with');
+    content.Add(
+      'the above shortcut file feature as well (it''ll open or focus a tab specified in');
+    content.Add('the file you attempted to open in the already existing instance).');
+    content.Add('');
+    content.Add(
+      'Check https://github.com/FRex/Botes for the latest version and more information.');
+    content.Add('');
+    content.Add('When the suggestions list box is visible pressing down will go into it');
+    content.Add('and pressing up when having first item selected in it or escape at');
+    content.Add('any time will go back to editing the query edit box.');
+    content.Add('');
+    content.Add(
+      'Pressing enter will select the item from list box, query it and go to text area.');
+    content.Add('Pressing backspace will go back to query edit box and put in it');
+    content.Add('the item minus the last character.');
+    content.Add('');
+    content.Add('');
+
+    content.SaveToFile(notefile);
+  finally
+    content.Free;
+  end;
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 var
   caretmarkup: TSynEditMarkupHighlightAllCaret;
@@ -250,11 +338,10 @@ begin
   MainTabs.Options := MainTabs.Options + [nboDoChangeOnSetIndex];
   StatusBar.Panels[OldSizePanel].Text := GetOldDirSize;
   FUndoCloseTabHistoryUsed := 0;
+  allnotespath := GetFileNearExe('allnotes.txt');
+  EnsureNotesExist(allnotespath);
 
   try
-    allnotespath := GetFileNearExe('allnotes.txt');
-    if not FileExists(allnotespath) then
-      allnotespath := GetFileNearExe('botes-initial-allnotes.txt');
 
     FAllLines.LoadFromFile(allnotespath);
     notespanelstr := allnotespath + ' - ' + PrettyPrintFileSize(FileSize(allnotespath));
