@@ -82,6 +82,7 @@ type
     FAllTagCount, FSelectedTagCount: integer;
     FUndoCloseTabHistory: array [0..UndoCloseTabHistoryMaxSize] of string;
     FUndoCloseTabHistoryUsed: integer;
+    FBaseTitle: string;
 
     procedure CollectAllTags;
     procedure FilterTextByAwesomeBar;
@@ -326,6 +327,7 @@ var
 begin
   WindowState := wsMaximized;
 
+  FBaseTitle := Caption;
   FAllLines := TStringList.Create;
   FAllLines.LineBreak := #10;
   FDiscardedLines := TStringList.Create;
@@ -836,9 +838,14 @@ begin
     FDiscardedLines.Clear;
     TextEditor.Lines.Assign(FAllLines);
     alllines := True;
+    Caption := FBaseTitle;
   end
   else
+  begin
+    Caption := FBaseTitle + ' - ' + AwesomeBar.Text;
+    Application.Title := Caption;
     FilterTextByAwesomeBar;
+  end;
 
   tmp := Format('Lines: %d/%d', [TextEditor.Lines.Count, FAllLines.Count]);
   StatusBar.Panels[LineCountPanel].Text := tmp;
