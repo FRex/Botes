@@ -842,7 +842,7 @@ begin
   end
   else
   begin
-    Caption := FBaseTitle + ' - ' + AwesomeBar.Text;
+    Caption := AwesomeBar.Text + ' - ' + FBaseTitle;
     Application.Title := Caption;
     FilterTextByAwesomeBar;
   end;
