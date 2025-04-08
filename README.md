@@ -20,6 +20,10 @@ compress those files individually or into an archive, especially since they are 
 similar to each other and saved very frequently so the space savings will be very large.
 The total size of all files in `old` directory is also displayed on the status bar.
 
+# Config dir - cfg
+Directory named `cfg` near the `botes.exe` can contain files to enable/disable some specific features.
+For now the only file is `always-save-unchanged` which prevents the "Unsaved changes, Save? Yes/No/Cancel"
+dialog box that appears when closing, or changing query or tab and always assume the answer is "Yes".
 
 # Demo
 In [releases](https://github.com/FRex/botes/releases) of this repo you will find the

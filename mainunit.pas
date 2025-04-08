@@ -1114,6 +1114,7 @@ const
   title = 'Unsaved changes';
   message = 'There are unsaved changes. Save them?';
 begin
+  if FileExists(GetFileNearExe('cfg/always-save-unchanged')) then Exit(mrYes);
   Result := MessageDlg(title, message, mtConfirmation, mbYesNoCancel, 0);
 end;
 
