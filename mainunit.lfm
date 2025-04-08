@@ -12,7 +12,7 @@ object Form1: TForm1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  LCLVersion = '2.0.6.0'
+  LCLVersion = '3.4.0.0'
   object MainTabs: TTabControl
     Left = 0
     Height = 633
@@ -32,11 +32,11 @@ object Form1: TForm1
       Top = 28
       Width = 935
       Align = alTop
+      TabOrder = 2
+      Text = 'AwesomeBar'
       OnChange = AwesomeBarChange
       OnEnter = AwesomeBarEnter
       OnKeyDown = AwesomeBarKeyDown
-      TabOrder = 2
-      Text = 'AwesomeBar'
     end
     object Suggestions: TListBox
       Left = 2
@@ -45,9 +45,9 @@ object Form1: TForm1
       Width = 935
       Align = alTop
       ItemHeight = 0
-      OnKeyDown = SuggestionsKeyDown
       TabOrder = 4
       TabStop = False
+      OnKeyDown = SuggestionsKeyDown
     end
     inline TextEditor: TSynEdit
       Left = 2
@@ -559,35 +559,35 @@ object Form1: TForm1
       AnchorSideTop.Control = TextEditor
       AnchorSideRight.Control = TextEditor
       AnchorSideRight.Side = asrBottom
-      Left = 376
-      Height = 29
+      Left = 375
+      Height = 30
       Top = 456
-      Width = 561
+      Width = 562
       Anchors = [akTop, akRight]
       AutoSize = True
       Caption = 'TextQueryPanel'
       ChildSizing.Layout = cclTopToBottomThenLeftToRight
-      ClientHeight = 29
-      ClientWidth = 561
+      ClientHeight = 30
+      ClientWidth = 562
       TabOrder = 3
       Visible = False
       object TextQuery: TEdit
-        Left = 0
+        Left = 1
         Height = 28
-        Top = 0
+        Top = 1
         Width = 360
         Constraints.MinWidth = 360
+        TabOrder = 0
+        Text = 'TextQuery'
         OnChange = TextQueryChange
         OnEnter = TextQueryEnter
         OnExit = TextQueryExit
         OnKeyPress = TextQueryKeyPress
-        TabOrder = 0
-        Text = 'TextQuery'
       end
       object TextQueryStatusLabel: TLabel
-        Left = 360
+        Left = 361
         Height = 28
-        Top = 0
+        Top = 1
         Width = 200
         Alignment = taCenter
         AutoSize = False
@@ -622,8 +622,8 @@ object Form1: TForm1
     end
   end
   object MainTabsActionList: TActionList
-    left = 427
-    top = 236
+    Left = 427
+    Top = 236
     object CloseTabAction: TAction
       Caption = 'CloseTabAction'
       OnExecute = CloseTabActionExecute
@@ -677,13 +677,13 @@ object Form1: TForm1
     Enabled = False
     Interval = 1
     OnTimer = DeselectSuggestionsTimerTimer
-    left = 32
-    top = 77
+    Left = 32
+    Top = 77
   end
   object UniqueInstance1: TUniqueInstance
     Enabled = True
     OnOtherInstance = UniqueInstance1OtherInstance
-    left = 277
-    top = 93
+    Left = 277
+    Top = 93
   end
 end
