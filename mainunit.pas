@@ -526,9 +526,24 @@ end;
 procedure TForm1.SuggestionsKeyDown(Sender: TObject; var Key: word; Shift: TShiftState);
 var
   str: string;
+  ans: TModalResult;
 begin
   if Key = VK_ESCAPE then
-    AwesomeBar.SetFocus;
+  begin
+    if TextEditor.Modified then
+    begin
+      ans := QueryUnsavedChanges;
+      if ans = mrYes then
+      begin
+        if SaveNotes then
+          AwesomeBar.SetFocus;
+      end;
+      if ans = mrNo then
+        AwesomeBar.SetFocus;
+    end
+    else
+      AwesomeBar.SetFocus;
+  end;
 
   if (Key = VK_RETURN) and (Suggestions.ItemIndex <> -1) then
   begin
