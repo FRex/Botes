@@ -117,7 +117,7 @@ const
   OldSizePanel = 3;
   NotesPathSizePanel = 4;
 
-{ TForm1 }
+  { TForm1 }
 
 function IsTagLine(const line: string): boolean;
 var
@@ -872,7 +872,10 @@ begin
   begin
     ans := QueryUnsavedChanges;
     if ans = mrCancel then
+    begin
+      TextEditor.SetFocus;
       Exit;
+    end;
 
     if ans = mrYes then
       SaveNotes;
