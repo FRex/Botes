@@ -493,7 +493,7 @@ object Form1: TForm1
       Lines.Strings = (
         'TextEditor'
       )
-      Options = [eoAutoIndent, eoBracketHighlight, eoGroupUndo, eoScrollPastEol, eoSmartTabs, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
+      Options = [eoAutoIndent, eoBracketHighlight, eoGroupUndo, eoSmartTabs, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
       Options2 = [eoCaretSkipTab, eoFoldedCopyPaste, eoOverwriteBlock]
       VisibleSpecialChars = [vscSpace, vscTabAtLast]
       ScrollBars = ssAutoBoth
