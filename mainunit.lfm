@@ -486,6 +486,10 @@ object Form1: TForm1
         item
           Command = ecUserDefined2
           ShortCut = 16459
+        end      
+        item
+          Command = ecUserDefined3
+          ShortCut = 24644
         end>
       MouseActions = <>
       MouseTextActions = <>

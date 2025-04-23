@@ -262,6 +262,8 @@ begin
     content.Add(
       'Ctrl + D - (for TODO lists), toggle between [ ] and [x] if current line starts with either.');
     content.Add(
+      'Ctrl + Shift + D - add a [ ] at the start of the line (for TODO lists) if not already present.');
+    content.Add(
       'Ctrl + O - open URL or hashtag that''s selected or (if nothing''s selected) under cursor');
     content.Add('');
     content.Add('Ctrl + F when in main text area will open a simple search');
@@ -573,8 +575,9 @@ end;
 procedure TForm1.TextEditorCommandProcessed(Sender: TObject;
   var Command: TSynEditorCommand; var AChar: TUTF8Char; Data: pointer);
 var
-  mark, word, line, url: string;
-  a, b: TPoint;
+  mark, word, line, url, tmp: string;
+  a, b, oldCaretXY, oldBlockBegin, oldBlockEnd: TPoint;
+  lineno: longint;
 begin
   if Command = (ecUserDefinedFirst + 0) then
   begin
@@ -623,6 +626,29 @@ begin
 
   if Command = (ecUserDefinedFirst + 2) then
     SortTodoListAroundCurrentLine;
+
+
+  if Command = (ecUserDefinedFirst + 3) then
+  begin
+    oldCaretXY := TextEditor.CaretXY;
+    oldBlockBegin := TextEditor.BlockBegin;
+    oldBlockEnd := TextEditor.BlockEnd;
+
+    for lineno := TextEditor.CharIndexToRowCol(TextEditor.SelStart).Y
+      to TextEditor.CharIndexToRowCol(TextEditor.SelEnd).Y do
+    begin
+      a.Create(1, lineno);
+      b.Create(4, lineno);
+      tmp := TextEditor.TextBetweenPoints[a, b];
+      if (tmp <> '[ ]') and (tmp <> '[x]') and (TextEditor.Lines[lineno - 1] <> '') then
+        TextEditor.TextBetweenPoints[a, b] := '[ ] ' + tmp;
+    end;
+
+    TextEditor.CaretXY := oldCaretXY;
+    TextEditor.BlockBegin := oldBlockBegin;
+    TextEditor.BlockEnd := oldBlockEnd;
+  end;
+
 end;
 
 function IsTodoLine(line: string): boolean;
