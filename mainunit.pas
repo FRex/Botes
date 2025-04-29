@@ -241,6 +241,7 @@ begin
   if FileExists(initialnotefile) then
   begin
     CopyFile(initialnotefile, notefile);
+    Exit;
   end;
 
   content := TStringList.Create;

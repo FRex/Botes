@@ -3,7 +3,7 @@ object Form1: TForm1
   Height = 633
   Top = 175
   Width = 939
-  Caption = 'Botes v25.04.23'
+  Caption = 'Botes v25.04.29'
   ClientHeight = 633
   ClientWidth = 939
   DesignTimePPI = 120
